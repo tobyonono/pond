@@ -20,6 +20,20 @@ interface Harvester {
 }
 
 const REGISTRY = {
+  goodreads: {
+    buildExpression: () => {
+      throw new Error("Goodreads uses public-page capture.");
+    },
+    adapt: () => null,
+    sourceIdFromUrl: (url) => sourceIdFromUrl("goodreads", url),
+  },
+  letterboxd: {
+    buildExpression: () => {
+      throw new Error("Letterboxd uses public-page capture.");
+    },
+    adapt: () => null,
+    sourceIdFromUrl: (url) => sourceIdFromUrl("letterboxd", url),
+  },
   twitter: {
     buildExpression: twitter.buildExpression,
     adapt: twitter.adapt,

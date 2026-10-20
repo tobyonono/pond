@@ -5,7 +5,11 @@ import { sourceFlow } from "@/features/sources/state/source-flow";
 import { watchFlow } from "@/features/sources/state/watch-flow";
 
 export const CONNECTABLE: readonly Source[] = SOURCES.filter(
-  (source) => source !== "local" && source !== "web",
+  (source) =>
+    source !== "local" &&
+    source !== "web" &&
+    source !== "goodreads" &&
+    source !== "letterboxd",
 );
 
 export const WATCH_MENU_SOURCES: readonly Source[] = CONNECTABLE.filter(

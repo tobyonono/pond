@@ -33,6 +33,49 @@ describe("nativeRequestSchema", () => {
 });
 
 describe("dispatchNative", () => {
+  it("rejects automatic bookmarks when a different Library is active", async () => {
+    const captureBookmark = vi
+      .fn()
+      .mockResolvedValue({ id: "01", created: true });
+    const result = await dispatchNative(
+      {
+        type: "bookmarks.capture",
+        libraryPath: "/wanted.pond",
+        url: "https://example.com/book",
+        title: "Book",
+        folderPath: ["References"],
+      },
+      ports({
+        captureBookmark,
+        libraryInfo: vi.fn().mockResolvedValue({ path: "/other.pond" }),
+      }),
+    );
+    expect(result).toEqual({ ok: false, error: "library_changed" });
+    expect(captureBookmark).not.toHaveBeenCalled();
+  });
+
+  it("passes a selected bookmark to the Library capture operation", async () => {
+    const captureBookmark = vi
+      .fn()
+      .mockResolvedValue({ id: "01", created: true });
+    const input = {
+      type: "bookmarks.capture",
+      libraryPath: "/wanted.pond",
+      url: "https://example.com/book",
+      title: "Book",
+      folderPath: ["References"],
+    };
+    expect(
+      await dispatchNative(
+        input,
+        ports({
+          captureBookmark,
+          libraryInfo: vi.fn().mockResolvedValue({ path: "/wanted.pond" }),
+        }),
+      ),
+    ).toEqual({ ok: true, data: { id: "01", created: true } });
+    expect(captureBookmark).toHaveBeenCalledWith(input);
+  });
   it("rejects an invalid payload", async () => {
     await expect(dispatchNative({ type: "nope" }, ports())).resolves.toEqual({
       ok: false,

@@ -34,6 +34,16 @@ export const EXTENSION_STORE_URLS = {
 const captureIdSchema = z.string().regex(/^[a-zA-Z0-9_-]{1,100}$/);
 
 export const nativeRequestSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("bookmarks.capture"),
+    libraryPath: z.string().min(1).max(8192),
+    url: z
+      .string()
+      .url()
+      .regex(/^https?:\/\//i),
+    title: z.string().max(4096),
+    folderPath: z.array(z.string().max(1024)).max(64),
+  }),
   z.object({ type: z.literal("hello") }),
   z.object({
     type: z.literal("capture.accept"),

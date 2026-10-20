@@ -379,6 +379,8 @@ function listUrlForSource(
       return THREADS_LIST_URL;
     case "web":
       return null;
+    case "goodreads":
+    case "letterboxd":
     case "local":
       return null;
   }
@@ -409,6 +411,8 @@ function buildListExpressionFor(
       return buildThreadsListExpression(args);
     case "web":
       return null;
+    case "goodreads":
+    case "letterboxd":
     case "local":
       return null;
   }

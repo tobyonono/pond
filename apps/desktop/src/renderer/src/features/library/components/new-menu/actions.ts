@@ -5,6 +5,7 @@ import { z } from "zod";
 import { openDuplicateReview } from "@/features/library/state/duplicate-review";
 import { folders } from "@/features/library/state/folders";
 import { libraryChrome } from "@/features/library/state/library-chrome";
+import { newMenuDialog } from "@/features/library/state/new-menu-dialog";
 import { openOrganizationReview } from "@/features/library/state/organization-review";
 import { savedViews } from "@/features/library/state/saved-views";
 import {
@@ -154,19 +155,7 @@ export function createNewActions({
   }
 
   async function importBookmarks(): Promise<void> {
-    const result = await window.pond.query("saves.importBookmarks", {});
-    if (!result.ok) {
-      if (result.reason === "cancelled") return;
-      throw new Error(result.error);
-    }
-    notify({
-      id: "new-import",
-      title: result.imported
-        ? `Imported ${result.imported} bookmark${result.imported === 1 ? "" : "s"}`
-        : "Nothing new to import",
-      description: result.skipped > 0 ? `${result.skipped} skipped` : undefined,
-      timeout: 5000,
-    });
+    newMenuDialog.open({ kind: "reference-import", source: "bookmarks" });
   }
 
   async function importMymind(): Promise<void> {

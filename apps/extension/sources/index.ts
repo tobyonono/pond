@@ -19,6 +19,12 @@ interface HookSource {
 }
 
 export const HOOK_SOURCES = {
+  goodreads: { matches: ["*://*.goodreads.com/*"], likes: [], item: "Book" },
+  letterboxd: {
+    matches: ["*://*.letterboxd.com/*", "*://boxd.it/*"],
+    likes: [],
+    item: "Film",
+  },
   twitter: { matches: twitter, likes: ["twitter:like"], item: "Post" },
   instagram: { matches: instagram, likes: ["instagram:like"], item: "Post" },
   pinterest: { matches: pinterest, likes: [], item: "Pin" },

@@ -211,6 +211,38 @@ export function parseBookmarkFile(text: string): BookmarkFile | null {
     : parseNetscapeBookmarks(text);
 }
 
+/** Keep every selected URL membership, even when the same URL also lives outside the selection. */
+export function selectBookmarkFolders(
+  file: BookmarkFile,
+  folderIds: string[],
+  includeRoot = false,
+): BookmarkFile {
+  const byId = new Map(file.folders.map((folder) => [folder.id, folder]));
+  if (folderIds.some((id) => !byId.has(id)))
+    throw new Error("The bookmark folders changed. Choose the file again.");
+  const selected = new Set(folderIds);
+  const belongs = (id: string): boolean => {
+    const seen = new Set<string>();
+    for (
+      let folder = byId.get(id);
+      folder && !seen.has(folder.id);
+      folder = folder.parentId ? byId.get(folder.parentId) : undefined
+    ) {
+      if (selected.has(folder.id)) return true;
+      seen.add(folder.id);
+    }
+    return false;
+  };
+  const bookmarks = file.bookmarks.flatMap((bookmark) => {
+    const memberships = bookmark.folderIds.filter(belongs);
+    return memberships.length ||
+      (includeRoot && bookmark.folderIds.length === 0)
+      ? [{ ...bookmark, folderIds: memberships }]
+      : [];
+  });
+  return { bookmarks, folders: file.folders };
+}
+
 export interface BookmarkImportDependencies {
   enqueueLink: (url: string) => Promise<EnqueueOneResult>;
   persistDates: (id: string, patch: Partial<NewSave>) => Promise<void>;

@@ -6,6 +6,12 @@ import type { NativePorts } from "./rpc";
 
 export function liveNativePorts(): NativePorts {
   return {
+    captureBookmark: async (input) => {
+      const { captureBrowserBookmark } = await import(
+        "../core/browser-bookmarks"
+      );
+      return captureBrowserBookmark(input);
+    },
     capture: async (draft, cookies) => {
       if (cookies?.length) attachCaptureCookies(draft.id, cookies);
       return captures.accept(draft);

@@ -1,6 +1,10 @@
 import type { QueryName } from "../../../shared/query-contracts";
 
 export const queryOperationAccess = {
+  "sources.previewImport": "hidden",
+  "sources.importReferences": "hidden",
+  "sources.importLetterboxdRss": "review",
+  "sources.setTmdbKey": "hidden",
   "accounts.disconnect": "review",
   "accounts.importOptions": "read",
   "accounts.list": "read",

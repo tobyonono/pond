@@ -122,7 +122,18 @@ export interface CaptureLinkCard {
 
 export const QUOTE_DEPTH_CAP = 3;
 
+export interface FilmDetails {
+  year?: string;
+  tmdbId?: number;
+  originalTitle?: string;
+  directors?: string[];
+  runtime?: number;
+  match?: "matched" | "ambiguous" | "unresolved";
+}
+
 export interface CaptureExtras {
+  book?: { isbn?: string; year?: string };
+  film?: FilmDetails;
   blockClass?: string;
   board?: { name?: string; url: string };
   clusters?: unknown;

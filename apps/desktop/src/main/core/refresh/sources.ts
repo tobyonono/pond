@@ -19,6 +19,10 @@ export function homeUrlForSource(source: Source): string {
       return "https://www.reddit.com/login/";
     case "threads":
       return "https://www.threads.com/login";
+    case "goodreads":
+      return "https://www.goodreads.com/";
+    case "letterboxd":
+      return "https://letterboxd.com/";
     case "web":
       return "";
     case "local":

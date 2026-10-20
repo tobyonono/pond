@@ -40,6 +40,7 @@ import {
 } from "@/utils/messaging";
 import { useLibrary } from "@/utils/use-library";
 import { useActiveTab, useShortcuts } from "../hooks";
+import { BookmarkFoldersPanel } from "./bookmark-folders";
 import { ShortcutsPanel } from "./shortcuts";
 import styles from "./styles.module.css";
 
@@ -94,6 +95,8 @@ const GROUPS: readonly { label: string; commands: readonly Command[] }[] = [
 ];
 
 const LOGOS = {
+  goodreads: IconBookmark,
+  letterboxd: IconBookmark,
   twitter: IconXTwitter,
   instagram: IconInstagram,
   pinterest: IconPinterest,
@@ -162,9 +165,25 @@ async function openPondSettings() {
   if (await sendMessage("openPond", "settings/extension")) window.close();
 }
 
-function MoreRows({ onShortcuts }: { onShortcuts: () => void }) {
+function MoreRows({
+  onShortcuts,
+  onBookmarks,
+}: {
+  onShortcuts: () => void;
+  onBookmarks: () => void;
+}) {
   return (
     <div className={styles.group}>
+      <Button
+        variant="ghost"
+        width="full"
+        className={styles.row}
+        onClick={onBookmarks}
+      >
+        <IconBookmark size={16} />
+        <span className={styles.label}>Bookmark Folders</span>
+        <IconChevronRight size={12} className={styles.trailing} />
+      </Button>
       <Button
         variant="ghost"
         width="full"
@@ -191,16 +210,19 @@ function MoreRows({ onShortcuts }: { onShortcuts: () => void }) {
 
 export function App() {
   const library = useLibrary();
-  const [view, setView] = useState<"commands" | "shortcuts" | "returned">(
-    "commands",
-  );
+  const [view, setView] = useState<
+    "commands" | "shortcuts" | "bookmarks" | "returned"
+  >("commands");
 
+  if (view === "bookmarks")
+    return <BookmarkFoldersPanel onBack={() => setView("returned")} />;
   if (view === "shortcuts")
     return <ShortcutsPanel onBack={() => setView("returned")} />;
   return (
     <Commands
       {...library}
       returned={view === "returned"}
+      onBookmarks={() => setView("bookmarks")}
       onShortcuts={() => setView("shortcuts")}
     />
   );
@@ -209,9 +231,16 @@ export function App() {
 interface CommandsProps extends ReturnType<typeof useLibrary> {
   returned: boolean;
   onShortcuts: () => void;
+  onBookmarks: () => void;
 }
 
-function Commands({ result, refresh, returned, onShortcuts }: CommandsProps) {
+function Commands({
+  result,
+  refresh,
+  returned,
+  onShortcuts,
+  onBookmarks,
+}: CommandsProps) {
   const tab = useActiveTab();
   const shortcuts = useShortcuts();
   const [error, setError] = useState<string | null>(null);
@@ -248,7 +277,7 @@ function Commands({ result, refresh, returned, onShortcuts }: CommandsProps) {
             </Button>
           </Empty.Action>
         </Empty.Root>
-        <MoreRows onShortcuts={onShortcuts} />
+        <MoreRows onShortcuts={onShortcuts} onBookmarks={onBookmarks} />
       </Shell>
     );
   }
@@ -315,7 +344,7 @@ function Commands({ result, refresh, returned, onShortcuts }: CommandsProps) {
           })}
         </nav>
       ))}
-      <MoreRows onShortcuts={onShortcuts} />
+      <MoreRows onShortcuts={onShortcuts} onBookmarks={onBookmarks} />
     </Shell>
   );
 }

@@ -8,6 +8,7 @@ import type {
   SessionImportResponse,
 } from "@pond/schema/session";
 import log from "electron-log/main.js";
+import type { BrowserBookmarkInput } from "../core/browser-bookmarks";
 import { UnsupportedError } from "../core/pipeline/extractors/errors";
 import type { LibraryInfo } from "../ops/library";
 
@@ -37,6 +38,7 @@ export interface NativeTag {
 }
 
 export interface NativePorts {
+  captureBookmark?: (input: BrowserBookmarkInput) => Promise<EnqueueResult>;
   capture?: (
     draft: CaptureWebDraft,
     cookies?: ExtensionCookie[],
@@ -67,6 +69,11 @@ export async function dispatchNative(
   const req = parsed.data;
   try {
     switch (req.type) {
+      case "bookmarks.capture":
+        if (!ports.captureBookmark) return { ok: false, error: "invalid" };
+        if ((await ports.libraryInfo()).path !== req.libraryPath)
+          return { ok: false, error: "library_changed" };
+        return { ok: true, data: await ports.captureBookmark(req) };
       case "capture.accept":
         if (!ports.capture) return { ok: false, error: "capture_unavailable" };
         return { ok: true, data: await ports.capture(req.draft, req.cookies) };

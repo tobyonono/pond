@@ -16,6 +16,12 @@ function storedRawJson(value: { capture?: StoredCapture }): RawJson {
 }
 
 describe("planOps", () => {
+  it("archives book and film reference pages without scheduling video downloads", () => {
+    for (const source of ["goodreads", "letterboxd"] as const) {
+      expect(planOps(source)).toContain("archive_page");
+      expect(planOps(source)).not.toContain("fetch_video_ytdlp");
+    }
+  });
   it("captures Threads posts like tweets and skips text covers", () => {
     const ops = planOps("threads");
     expect(ops).toContain("capture_tweet");

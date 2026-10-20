@@ -6,6 +6,7 @@ import { CosmosTileExtractor } from "./sources/cosmos";
 import { InstagramPostExtractor } from "./sources/instagram";
 import { PinterestPinExtractor } from "./sources/pinterest";
 import { RedditPostExtractor } from "./sources/reddit";
+import { ReferenceExtractor } from "./sources/reference";
 import { ThreadsPostExtractor } from "./sources/threads";
 import { TikTokVideoExtractor } from "./sources/tiktok";
 import { TwitterTweetExtractor } from "./sources/twitter";
@@ -13,6 +14,8 @@ import { YouTubeWatchExtractor } from "./sources/youtube";
 import type { ExtractInput, Extractor } from "./types";
 
 const EXTRACTORS = {
+  goodreads: new ReferenceExtractor("goodreads"),
+  letterboxd: new ReferenceExtractor("letterboxd"),
   twitter: new TwitterTweetExtractor(),
   instagram: new InstagramPostExtractor(),
   tiktok: new TikTokVideoExtractor(),

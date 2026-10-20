@@ -11,6 +11,8 @@ export const GLOBAL_POOL_CAP = 3;
 const IDLE_EVICT_MS = 60_000;
 
 const PER_SOURCE_CAP = {
+  goodreads: 1,
+  letterboxd: 1,
   twitter: 3,
   instagram: 2,
   tiktok: 2,
@@ -40,6 +42,8 @@ interface Waiter {
 
 const pool: PoolSlot[] = [];
 const busyBySource = {
+  goodreads: 0,
+  letterboxd: 0,
   twitter: 0,
   instagram: 0,
   tiktok: 0,

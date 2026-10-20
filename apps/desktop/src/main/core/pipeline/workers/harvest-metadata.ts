@@ -35,7 +35,10 @@ export async function runHarvestMetadata(
 
   const extractor = extractorFor(save.source) ?? resolveExtractor(save.url);
   const capture =
-    save.source === "web" || save.source === "local"
+    save.source === "web" ||
+    save.source === "local" ||
+    save.source === "goodreads" ||
+    save.source === "letterboxd"
       ? await extractor.extract({ url: new URL(save.url), signal: ctx.signal })
       : await captureFromSource({
           url: save.url,
@@ -73,7 +76,7 @@ function buildSavePatch(
   const media = walkCaptureMedia(capture);
   const mediaUrl = capture.media[0]?.url ?? media[0]?.url ?? null;
   const mediaType =
-    source === "web"
+    source === "web" || source === "goodreads" || source === "letterboxd"
       ? "link"
       : majorityMediaType(
           capture.media.map((m) => (m.type === "video" ? "video" : "image")),

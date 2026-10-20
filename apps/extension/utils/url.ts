@@ -20,6 +20,8 @@ export function cookieDomainsForSource(source: Source): string[] {
       return ["reddit.com"];
     case "threads":
       return ["threads.net", "threads.com", "instagram.com"];
+    case "goodreads":
+    case "letterboxd":
     case "web":
     case "local":
       return [];

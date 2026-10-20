@@ -56,6 +56,8 @@ export type PondSettings = {
 };
 
 const ALL_SOURCES_ON = {
+  goodreads: true,
+  letterboxd: true,
   twitter: true,
   instagram: true,
   pinterest: true,

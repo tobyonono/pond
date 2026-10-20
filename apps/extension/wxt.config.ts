@@ -124,6 +124,7 @@ export default defineConfig({
       "nativeMessaging",
       "alarms",
     ],
+    optional_permissions: ["bookmarks"],
     host_permissions: ["<all_urls>"],
     /** The overlay registers Inter on the page; a per-session URL keeps sites from probing for the extension. */
     web_accessible_resources: [

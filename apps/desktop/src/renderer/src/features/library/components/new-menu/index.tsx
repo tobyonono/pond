@@ -13,6 +13,7 @@ import { filterMenuItems } from "@/shared/components/spec-context-menu/filter";
 import { useMenuFilterQuery } from "@/shared/hooks/use-menu-filter-query";
 import { useRetainedDialogPayload } from "@/shared/hooks/use-retained-dialog-payload";
 import { LibraryRepairDialog } from "../repair-dialog";
+import { ReferenceImportDialog } from "./reference-import-dialog";
 import { SaveDialog } from "./save-dialog";
 import { buildNewMenuItems } from "./spec";
 import styles from "./styles.module.css";
@@ -76,6 +77,16 @@ export function NewMenuDialogHost() {
     void blankDocuments.refresh();
   }, []);
   const kind = presentation.payload;
+  if (kind?.kind === "reference-import") {
+    return (
+      <ReferenceImportDialog
+        key={kind.source}
+        source={kind.source}
+        open={presentation.open}
+        onClose={() => newMenuDialog.close()}
+      />
+    );
+  }
   if (kind?.kind === "links") {
     return (
       <SaveDialog

@@ -27,6 +27,8 @@ interface SourceDef {
 }
 
 const SOURCE_LOGOS = {
+  goodreads: null,
+  letterboxd: null,
   twitter: null,
   pinterest: null,
   arena: null,
@@ -41,6 +43,8 @@ const SOURCE_LOGOS = {
 } satisfies Record<Source, string | null>;
 
 const SOURCE_ICONS = {
+  goodreads: IconSourceWeb,
+  letterboxd: IconSourceWeb,
   twitter: IconXTwitter,
   pinterest: IconPinterest,
   arena: IconBrandArena,

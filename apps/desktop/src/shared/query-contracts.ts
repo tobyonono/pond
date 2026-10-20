@@ -47,6 +47,10 @@ import type {
 } from "./query-contracts-system";
 import type { QueueQueryInputs, QueueQueryResults } from "./queue-contracts";
 import type {
+  ReferenceImportsInputs,
+  ReferenceImportsResults,
+} from "./reference-import-contracts";
+import type {
   SavesClipboardQueryInputs,
   SavesClipboardQueryResults,
 } from "./saves-clipboard-contracts";
@@ -118,7 +122,8 @@ interface SavedViewInput {
 export type { OkResult } from "./query-contracts-shared";
 
 export interface QueryInputs
-  extends AccountQueryInputs,
+  extends ReferenceImportsInputs,
+    AccountQueryInputs,
     TransferQueryInputs,
     BulkQueryInputs,
     FolderQueryInputs,
@@ -316,7 +321,8 @@ export interface QueryInputs
 }
 
 export interface QueryResults
-  extends AccountQueryResults,
+  extends ReferenceImportsResults,
+    AccountQueryResults,
     TransferQueryResults,
     BulkQueryResults,
     SystemQueryResults,

@@ -37,6 +37,8 @@ interface SyncOptions {
 }
 
 const SYNC_WATCHDOG_MS = {
+  goodreads: 20 * 60_000,
+  letterboxd: 20 * 60_000,
   twitter: 30 * 60_000,
   youtube: 20 * 60_000,
   cosmos: 20 * 60_000,

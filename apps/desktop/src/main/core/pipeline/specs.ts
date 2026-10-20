@@ -21,7 +21,7 @@ export function maxAttemptsFor(op: Op): number {
 
 export function planOps(source: Source): readonly Op[] {
   if (source === "local") return [];
-  if (source === "web") {
+  if (source === "web" || source === "goodreads" || source === "letterboxd") {
     return [
       "harvest_metadata",
       "render_text_cover",
@@ -67,6 +67,8 @@ interface CaptureExpectation {
 }
 
 export const CAPTURE_EXPECTATIONS = {
+  goodreads: { required: ["title"], recommended: ["author", "mediaUrl"] },
+  letterboxd: { required: ["title"], recommended: ["mediaUrl"] },
   twitter: {
     required: ["author"],
     recommended: [

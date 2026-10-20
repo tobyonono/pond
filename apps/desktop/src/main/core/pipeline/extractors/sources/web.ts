@@ -62,6 +62,12 @@ export class WebPageExtractor implements Extractor {
   }
 
   async extract(input: ExtractInput): Promise<Capture> {
+    return (await this.extractWithHtml(input)).capture;
+  }
+
+  async extractWithHtml(
+    input: ExtractInput,
+  ): Promise<{ capture: Capture; html: string }> {
     const html =
       (await this.dependencies.fetchHtml(input.url.href)) ??
       (await this.dependencies.renderHtml(input.url.href, input.signal));
@@ -98,7 +104,7 @@ export class WebPageExtractor implements Extractor {
     if (author) capture.author = author;
     if (publishedAt) capture.publishedAt = publishedAt;
     if (Object.keys(extras).length > 0) capture.extras = extras;
-    return capture;
+    return { capture, html };
   }
 }
 

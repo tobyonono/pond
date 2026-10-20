@@ -21,6 +21,7 @@ import { mediaUnderstandingQueries } from "./media-understanding";
 import { openWithQueries } from "./open-with";
 import type { QueryHandlerMap, QueryParams } from "./params";
 import { queueQueries } from "./queue";
+import { referenceImportsQueries } from "./reference-imports";
 import { savedViewsQueries } from "./saved-views";
 import { savesQueries } from "./saves";
 import { settingsQueries } from "./settings";
@@ -35,6 +36,7 @@ import { watchesQueries } from "./watches";
 type ContractHandlers = Required<QueryHandlerMap>;
 
 const queryRegistry = {
+  ...referenceImportsQueries,
   ...transferJobsQueries,
   ...updateQueries,
   ...bulkQueries,

@@ -1,0 +1,46 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 580px;
+  padding: 12px;
+  overflow-y: auto;
+  font-size: var(--ds-text-sm);
+  animation: enter var(--ds-duration-emphasized) var(--ds-easing-snap);
+}
+
+.title {
+  font-size: var(--ds-text-lg);
+}
+.folders {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+}
+.folders legend {
+  margin-bottom: 10px;
+}
+.folder {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  cursor: pointer;
+}
+.error {
+  color: var(--ds-red-11);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}

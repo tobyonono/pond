@@ -17,6 +17,22 @@ const NO_SYNC: SourceSyncConfig = {
 
 export const SOURCE_DESCRIPTORS = [
   {
+    id: "goodreads",
+    label: "Goodreads",
+    hosts: ["goodreads.com"],
+    urlPatterns: [/^https?:\/\/(?:www\.)?goodreads\.com\/book\/show\/(\d+)/i],
+  },
+  {
+    id: "letterboxd",
+    label: "Letterboxd",
+    hosts: ["letterboxd.com", "boxd.it"],
+    urlPatterns: [
+      /^https?:\/\/(?:www\.)?letterboxd\.com\/film\/([^/?#]+)/i,
+      /^https?:\/\/(?:www\.)?letterboxd\.com\/[^/]+\/film\/([^/?#]+)/i,
+      /^https?:\/\/boxd\.it\/([A-Za-z0-9]+)/i,
+    ],
+  },
+  {
     id: "twitter",
     label: "Twitter",
     hosts: ["x.com", "twitter.com"],

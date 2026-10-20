@@ -42,6 +42,8 @@ describe("new menu spec", () => {
       "Import from Links",
       "Import from Clipboard",
       "Import Bookmarks",
+      "Import Goodreads",
+      "Import Letterboxd",
       "Import mymind",
       "Import Page Assets",
       "Import Eagle Package",

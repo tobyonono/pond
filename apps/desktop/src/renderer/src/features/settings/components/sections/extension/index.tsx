@@ -14,6 +14,8 @@ import { useAccounts } from "@/features/sources";
 import { usePrefs } from "@/shared/state/prefs";
 
 const SAVES = {
+  goodreads: "Save books when you add them to a shelf.",
+  letterboxd: "Save films when you add them to your watchlist.",
   twitter: "Save posts when you bookmark them.",
   instagram: "Save posts when you save them to a collection.",
   pinterest: "Save Pins when you save them to a board.",

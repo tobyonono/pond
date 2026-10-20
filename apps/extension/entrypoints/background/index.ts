@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { onMessage } from "@/utils/messaging";
 import { ensureSettings, getSettings, watchSettings } from "@/utils/settings";
+import { startBookmarkSync } from "./bookmarks";
 import { saveFromSite } from "./capture";
 import { probeLibrary } from "./library";
 import { createMenus, handleCommand, handleMenuClick } from "./menus";
@@ -16,6 +17,7 @@ const pondPathSchema = z
   .optional();
 
 export default defineBackground(() => {
+  startBookmarkSync();
   browser.runtime.onInstalled.addListener(async () => {
     await ensureSettings();
     clearBadge();

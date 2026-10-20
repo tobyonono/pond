@@ -47,7 +47,6 @@ import {
   createNote,
   exportDebugReport,
   findDuplicates,
-  importBookmarks,
   importClipboard,
   importEagle,
   importEaglePackage,
@@ -193,7 +192,33 @@ export function buildNewMenuItems(
           label: "Import Bookmarks",
           icon: <IconGlobe />,
           keywords: "netscape chrome safari html bookmark file",
-          onClick: () => void runNewAction(importBookmarks),
+          onClick: () =>
+            newMenuDialog.open({
+              kind: "reference-import",
+              source: "bookmarks",
+            }),
+        },
+        {
+          id: "goodreads",
+          label: "Import Goodreads",
+          icon: <IconFolderImport />,
+          keywords: "books shelves csv library export",
+          onClick: () =>
+            newMenuDialog.open({
+              kind: "reference-import",
+              source: "goodreads",
+            }),
+        },
+        {
+          id: "letterboxd",
+          label: "Import Letterboxd",
+          icon: <IconFolderImport />,
+          keywords: "films movies ratings watchlist rss tmdb",
+          onClick: () =>
+            newMenuDialog.open({
+              kind: "reference-import",
+              source: "letterboxd",
+            }),
         },
         {
           id: "mymind",
