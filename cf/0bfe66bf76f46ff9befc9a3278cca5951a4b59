@@ -1,0 +1,127 @@
+apps/desktop/src/main/core/bookmark-selection.test.ts
+  s_02c7375839359f::t_fbf6fad09ac7a0 1-32
+apps/desktop/src/main/core/bookmarks.ts
+  s_02c7375839359f::t_7dc0e7ae462457 214-245
+apps/desktop/src/main/core/browser-bookmarks.ts
+  s_02c7375839359f::t_2245a1f0f0c914 1-42
+apps/desktop/src/main/core/pipeline/extractors/index.ts
+  s_02c7375839359f::t_07b76617bfff83 9,17-18
+apps/desktop/src/main/core/pipeline/extractors/sources/reference.test.ts
+  s_02c7375839359f::t_5b6ee3dc7b1634 1-74
+apps/desktop/src/main/core/pipeline/extractors/sources/reference.ts
+  s_02c7375839359f::t_af9de3ddb83faa 1-111
+apps/desktop/src/main/core/pipeline/extractors/sources/web.ts
+  s_02c7375839359f::t_10a457ae02aba4 65-70,107
+apps/desktop/src/main/core/reference-import/enrichment.test.ts
+  s_02c7375839359f::t_91baa470073aaf 1-124
+apps/desktop/src/main/core/reference-import/import.test.ts
+  s_02c7375839359f::t_277c9bd74338de 1-109
+apps/desktop/src/main/core/reference-import/index.ts
+  s_02c7375839359f::t_b7ce0effaddab2 1-259
+apps/desktop/src/main/core/reference-import/records.test.ts
+  s_02c7375839359f::t_3f4baf44c2ed4d 1-112
+apps/desktop/src/main/core/reference-import/records.ts
+  s_02c7375839359f::t_46e8ed2d62ce7b 1-226
+apps/desktop/src/main/core/refresh/harvest-window/harvest-list.ts
+  s_02c7375839359f::t_68dc2ebd18be67 382-383,414-415
+apps/desktop/src/main/core/refresh/harvest-window/pool.ts
+  s_02c7375839359f::t_48ef2b37777838 14-15,45-46
+apps/desktop/src/main/core/refresh/harvest/index.ts
+  s_02c7375839359f::t_63f49c81b56927 23-36
+apps/desktop/src/main/core/refresh/sources.ts
+  s_02c7375839359f::t_888ec2822238de 22-25
+apps/desktop/src/main/core/sync/index.ts
+  s_02c7375839359f::t_3e43ece6a258a8 40-41
+apps/desktop/src/main/ipc/queries/agent-operation-access.ts
+  s_02c7375839359f::t_cce00ef59e9393 4-7
+apps/desktop/src/main/ipc/queries/index.ts
+  s_02c7375839359f::t_c59a7ced010918 24,39
+apps/desktop/src/main/ipc/queries/reference-imports.ts
+  s_02c7375839359f::t_11c89baec2d0bb 1-175
+apps/desktop/src/main/native/ports.ts
+  s_02c7375839359f::t_46cb4d33b96693 9-14
+apps/desktop/src/main/native/rpc.test.ts
+  s_02c7375839359f::t_aec1f5eecde330 36-78
+apps/desktop/src/main/native/rpc.ts
+  s_02c7375839359f::t_55dd187017a526 11,41,72-76
+apps/desktop/src/renderer/src/features/library/components/new-menu/index.tsx
+  s_02c7375839359f::t_04f61152e85f40 16,80-89
+apps/desktop/src/renderer/src/features/library/components/new-menu/reference-import-dialog/index.test.tsx
+  s_02c7375839359f::t_1568132cfceffa 1-76
+apps/desktop/src/renderer/src/features/library/components/new-menu/reference-import-dialog/index.tsx
+  s_02c7375839359f::t_cffe0352480a62 1-311
+apps/desktop/src/renderer/src/features/library/components/new-menu/reference-import-dialog/styles.module.css
+  s_02c7375839359f::t_1f35c547bda2b0 1-55
+apps/desktop/src/renderer/src/features/library/components/new-menu/spec.tsx
+  s_02c7375839359f::t_d9e59b8387fad0 195-221
+apps/desktop/src/renderer/src/features/library/state/new-menu-dialog.ts
+  s_02c7375839359f::t_5da792a877bf51 2,7
+apps/desktop/src/renderer/src/features/settings/components/sections/extension/index.tsx
+  s_02c7375839359f::t_196fb4fb6a8d24 17-18
+apps/desktop/src/renderer/src/features/sources/lib/create.ts
+  s_02c7375839359f::t_882ef28683cfad 8-12
+apps/desktop/src/renderer/src/features/sources/lib/registry.ts
+  s_02c7375839359f::t_cfa00fc130fef2 30-31,46-47
+apps/desktop/src/shared/import-scope.ts
+  s_02c7375839359f::t_b7fac3c83c3609 45-46
+apps/desktop/src/shared/query-contracts.ts
+  s_02c7375839359f::t_b971b5bccb9d1c 49-52,125-126,324-325
+apps/desktop/src/shared/reference-import-contracts.ts
+  s_02c7375839359f::t_17333cc705302e 1-43
+apps/extension/entrypoints/background/index.ts
+  s_02c7375839359f::t_7d6531e71b0bb7 4,20
+apps/extension/entrypoints/popup/app/bookmark-folders/styles.module.css
+  s_02c7375839359f::t_be4ecf97d42801 1-46
+apps/extension/entrypoints/popup/app/index.tsx
+  s_02c7375839359f::t_1f6f5ee132fa72 43,98-99,168-174,177-186,213-215,217-218,225,234,237-243,280,347
+apps/extension/sources/goodreads/inject.ts
+  s_02c7375839359f::t_0a28a0951bec6e 1-33
+apps/extension/sources/goodreads/save-request.test.ts
+  s_02c7375839359f::t_de465a86e08583 1-69
+apps/extension/sources/goodreads/save-request.ts
+  s_02c7375839359f::t_eaeebfa58e33f1 1-68
+apps/extension/sources/index.ts
+  s_02c7375839359f::t_91d2686788e085 22-27
+apps/extension/sources/inject.ts
+  s_02c7375839359f::t_2b1d98f27a7aea 4,6,16-17
+apps/extension/sources/letterboxd/inject.ts
+  s_02c7375839359f::t_1615acf1ea3b24 1-49
+apps/extension/sources/letterboxd/save-request.test.ts
+  s_02c7375839359f::t_b07a77a80e6f0d 1-61
+apps/extension/sources/letterboxd/save-request.ts
+  s_02c7375839359f::t_2ede733c0891b2 1-44
+apps/extension/utils/bookmark-plan.test.ts
+  s_02c7375839359f::t_d7f2ede7302d5a 1-106
+apps/extension/utils/bookmark-settings.ts
+  s_02c7375839359f::t_c588c682edca28 1-32
+apps/extension/utils/types.ts
+  s_02c7375839359f::t_0d3da288c2a54f 59-60
+apps/extension/utils/url.ts
+  s_02c7375839359f::t_68ec05d0d192bd 23-24
+apps/extension/wxt.config.ts
+  s_02c7375839359f::t_fad7fc87757a15 127
+docs/supported-sources.md
+  s_02c7375839359f::t_3a50da4e185caf 13-14
+packages/schema/src/native.ts
+  s_02c7375839359f::t_1c69cd84a5cf0e 37-46
+packages/schema/src/raw.ts
+  s_02c7375839359f::t_f5d7d82b025657 125-133,135-136
+packages/schema/src/sources/registry.ts
+  s_02c7375839359f::t_638e57387674ac 19-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "cf0bfe66bf76f46ff9befc9a3278cca5951a4b59",
+  "prompts": {},
+  "sessions": {
+    "s_02c7375839359f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a125d1-8f62-70a1-9cc4-aeaf3fe5150d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Toby Onono <ononop@tcd.ie>"
+    }
+  }
+}
