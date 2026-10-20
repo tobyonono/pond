@@ -61,8 +61,9 @@ export default defineConfig({
     excludeSources: ["packages/icons/brand/**"],
   },
   manifest: ({ browser }) => ({
-    name: "Pond",
+    name: "Pond (Toby)",
     version: "1.2.0",
+    version_name: "1.2.0 (Toby fork)",
     ...(browser === "firefox"
       ? {
           browser_specific_settings: {

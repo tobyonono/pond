@@ -1,8 +1,18 @@
 import { DEFAULT_PREFS } from "@pond/schema/db";
 import { describe, expect, it } from "vitest";
-import { installedChannel, withInstalledChannel } from "./update-channel";
+import {
+  installedChannel,
+  isForkBuild,
+  withInstalledChannel,
+} from "./update-channel";
 
 describe("update channel", () => {
+  it("keeps fork builds outside the upstream update channel", () => {
+    expect(isForkBuild("1.2.0-fork.1")).toBe(true);
+    expect(isForkBuild("1.2.0-fork")).toBe(true);
+    expect(isForkBuild("1.2.0")).toBe(false);
+    expect(isForkBuild("1.2.0-nightly.20261020.1")).toBe(false);
+  });
   it("reads nightly from a nightly version and stable from anything else", () => {
     expect(installedChannel("1.0.2-nightly.20261018.42")).toBe("nightly");
     expect(installedChannel("1.0.1")).toBe("stable");

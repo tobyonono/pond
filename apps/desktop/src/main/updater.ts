@@ -4,7 +4,7 @@ import { IPC } from "../shared/constants";
 import type { OkResult, ReasonFailure } from "../shared/query-contracts-shared";
 import type { UpdateNotice } from "../shared/update-notice";
 import { getPrefs } from "./core/prefs";
-import { installedChannel } from "./core/update-channel";
+import { installedChannel, isForkBuild } from "./core/update-channel";
 import {
   createUpdaterCoordinator,
   type UpdaterPort,
@@ -57,7 +57,7 @@ async function loadUpdater(): Promise<UpdaterPort> {
 }
 
 const updater = createUpdaterCoordinator({
-  isPackaged: () => app.isPackaged,
+  isPackaged: () => app.isPackaged && !isForkBuild(app.getVersion()),
   loadUpdater,
   loadPreferences: async () => {
     const { autoInstall, channel } = (await getPrefs()).updates;
@@ -79,8 +79,8 @@ const updater = createUpdaterCoordinator({
 
 export function registerAutoUpdater(): void {
   if (wired) return;
-  if (!app.isPackaged) {
-    log.info("[pond updater] skipped (dev build)");
+  if (!app.isPackaged || isForkBuild(app.getVersion())) {
+    log.info("[pond updater] skipped (development or fork build)");
     return;
   }
   wired = true;

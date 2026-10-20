@@ -1,0 +1,11 @@
+# Local fork distribution. Keep the app name and ID so the existing Library,
+# credentials, native host and Dock shortcut continue to work.
+extends: electron-builder.yml
+extraMetadata:
+  version: 1.2.0-fork.1
+publish: null
+mac:
+  notarize: false
+  identity: null
+  extendInfo:
+    PondDistribution: tobyonono/pond

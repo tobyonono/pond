@@ -59,3 +59,26 @@ generic web Saves and short-link aliases for duplicates during that rehearsal.
 Do not install a custom binary with upstream automatic updates enabled. No
 installation, account changes, publishing or personal Library migration is part
 of this development checkout.
+
+## Local fork package
+
+Build both apps, then package the local Apple Silicon desktop build:
+
+```sh
+pnpm exec turbo run build --filter=@pond/desktop --filter=@pond/extension
+cd apps/desktop
+node scripts/build-native-host.mjs
+CSC_IDENTITY_AUTO_DISCOVERY=false pnpm exec electron-builder --config electron-builder.fork.yml --mac --arm64 --dir --publish never
+```
+
+`electron-builder.fork.yml` retains Pond's application identity and Library
+location, marks the version `1.2.0-fork.1`, and disables publishing. Fork-marked
+builds disable the updater, including manual download and installation paths,
+so an upstream release cannot replace custom changes. This local package is
+unsigned and not notarized. The extension is labelled **Pond (Toby)** and keeps
+the same unpacked extension ID, preserving its settings and native-host access.
+
+Before replacing an installed version, quit Pond and back up both the Library
+and its application-support directory. Keep the original app and extension for
+rollback. Reusing the same app identity avoids importing the existing Library
+again. Automatic browser-folder sync is opt-in after the extension is updated.
