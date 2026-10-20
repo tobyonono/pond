@@ -1,0 +1,14 @@
+docs/artifact-source-validation.md
+  h_037a3f0f34888c 33-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9caabdc524eb61f16cd45aae3c55b000382da3a9",
+  "prompts": {},
+  "humans": {
+    "h_037a3f0f34888c": {
+      "author": "Toby Onono <ononop@tcd.ie>"
+    }
+  }
+}
