@@ -1,0 +1,27 @@
+apps/desktop/electron-builder.fork.yml
+  s_02c7375839359f::t_3470cea60c732f 1-11
+apps/desktop/src/main/core/update-channel.ts
+  s_02c7375839359f::t_1ad26b95eb9302 5-9
+apps/desktop/src/main/updater.ts
+  s_02c7375839359f::t_04cccff2e4f283 7,60,82-83
+apps/extension/wxt.config.ts
+  s_02c7375839359f::t_94c80041687eca 64,66
+docs/artifact-source-setup.md
+  s_02c7375839359f::t_77d5c7f95b2090 62-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76370bbe5afc88590dc5d1a9f5409b84c1df7e9c",
+  "prompts": {},
+  "sessions": {
+    "s_02c7375839359f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a125d1-8f62-70a1-9cc4-aeaf3fe5150d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Toby Onono <ononop@tcd.ie>"
+    }
+  }
+}
