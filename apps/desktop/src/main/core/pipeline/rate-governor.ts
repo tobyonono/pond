@@ -25,6 +25,7 @@ import {
   schedulePersist,
 } from "./rate-governor-state";
 import { type HeaderBag, parseRateSignal } from "./rate-headers";
+import { rateLimitCooldownMs } from "./rate-limit-cooldown";
 import {
   noteDurableSourceFailure,
   recordSourceRequest,
@@ -331,12 +332,12 @@ export function report(source: Source, input: ReportInput): ReportResult {
   const rateLimited = input.rateLimited === true || is429;
 
   if (rateLimited) {
-    const sec =
-      input.retryAfterSec ??
-      signal?.retryAfterSec ??
-      Math.min(900, 60 * (multiplier.get(source) ?? 1));
+    const ms = rateLimitCooldownMs(
+      source,
+      multiplier.get(source) ?? 1,
+      input.retryAfterSec ?? signal?.retryAfterSec ?? undefined,
+    );
     bumpMultiplier(source);
-    const ms = Math.max(1_000, sec * 1000);
     setSourceCooldown(source, ms);
     return { cooldownMs: ms };
   }

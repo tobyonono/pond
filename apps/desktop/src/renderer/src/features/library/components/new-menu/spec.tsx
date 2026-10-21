@@ -37,8 +37,8 @@ import {
 } from "@shared/blank-documents";
 import { newMenuDialog } from "@/features/library/state/new-menu-dialog";
 import {
-  connectableSourceItems,
   pickWatchedFolder,
+  sourceSetupItems,
   watchableSourceItems,
 } from "@/features/sources";
 import { shortcutGlyphs } from "@/shared/lib/shortcuts";
@@ -296,9 +296,11 @@ export function buildNewMenuItems(
           label: "New Source",
           icon: <IconUserPlus />,
           keywords: "new account sync auto import connect",
-          items: connectableSourceItems((source) =>
-            newSource("connect", source),
-          ),
+          items: sourceSetupItems({
+            onConnect: (source) => newSource("connect", source),
+            onImport: (source) =>
+              newMenuDialog.open({ kind: "reference-import", source }),
+          }),
         },
         {
           type: "submenu",

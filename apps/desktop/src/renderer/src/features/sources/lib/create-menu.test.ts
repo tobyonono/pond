@@ -11,6 +11,7 @@ describe("source create menu", () => {
       onConnect,
       onWatch: vi.fn(),
       onFolder: vi.fn(),
+      onImport: vi.fn(),
     });
     expect(labels(items)).toEqual([
       "New Source",
@@ -23,6 +24,9 @@ describe("source create menu", () => {
       "YouTube",
       "Reddit",
       "Threads",
+      "Goodreads",
+      "Letterboxd",
+      "Bookmark Folders",
       "New Watch",
       "Twitter",
       "Instagram",
@@ -42,6 +46,7 @@ describe("source create menu", () => {
       onConnect,
       onWatch,
       onFolder: vi.fn(),
+      onImport: vi.fn(),
     });
     const connect = items.find(
       (item) => item.type === "submenu" && item.id === "new-source",
@@ -72,11 +77,37 @@ describe("source create menu", () => {
     expect(onWatch).toHaveBeenCalledExactlyOnceWith("youtube");
   });
 
+  it("opens reference setup without starting an account login", () => {
+    const onImport = vi.fn();
+    const onConnect = vi.fn();
+    const items = buildSourceNewMenuItems({
+      onConnect,
+      onImport,
+      onWatch: vi.fn(),
+      onFolder: vi.fn(),
+    });
+    const menu = items.find(
+      (item) => item.type === "submenu" && item.id === "new-source",
+    );
+    if (menu?.type !== "submenu") throw new Error("Missing New Source");
+    for (const source of ["goodreads", "letterboxd", "bookmarks"]) {
+      const item = menu.items.find(
+        (entry) => "id" in entry && entry.id === `import-${source}`,
+      );
+      if (!item || !("onClick" in item)) throw new Error(`Missing ${source}`);
+      item.onClick?.();
+      expect(onImport).toHaveBeenLastCalledWith(source);
+    }
+    expect(onImport).toHaveBeenCalledTimes(3);
+    expect(onConnect).not.toHaveBeenCalled();
+  });
+
   it("uses source tiles so light logos stay visible on the menu", () => {
     const items = buildSourceNewMenuItems({
       onConnect: vi.fn(),
       onWatch: vi.fn(),
       onFolder: vi.fn(),
+      onImport: vi.fn(),
     });
     const connect = items.find(
       (item) => item.type === "submenu" && item.id === "new-source",

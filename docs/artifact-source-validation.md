@@ -47,3 +47,29 @@ extension showed **Pond (Toby) 1.2.0 (Toby fork)**, enabled and connected. No
 re-import was required. Browser-folder watching remains opt-in; this check did
 not select folders or grant the optional bookmarks permission. Signed-in site
 save-action behavior remains separate from installation verification.
+
+
+## Local corrections — 2026-10-21
+
+Installed `1.2.0-fork.2` after cloning today's Library, app support and application
+into `Pond Backups/2026-10-21-before-fork2`. Both staged and installed apps pass
+`codesign --verify --deep --strict`; packaging now uses a sealed ad-hoc signature
+and checks it after signing. The previous local package had retained Electron's
+invalid linker signature. No Developer ID identity is installed, and the exact
+reported password prompt has not yet been identified.
+
+Verified the new Goodreads, Letterboxd and Bookmark Folders menu entries in the
+installed Sources screen, and opened Goodreads setup. These entries still open
+file-import setup in this checkpoint. The user clarified that Goodreads and
+Letterboxd must instead be connected Accounts with historical and ongoing sync;
+that is the next implementation phase, not completed by these menu shortcuts.
+
+Instagram capture sessions now gate each API XHR through the persistent governor,
+serialize capture windows, use lower local ceilings and apply a fifteen-minute
+minimum 429 cooldown. A likes 429 remains a failure after partial results.
+Production desktop and extension builds and signature-verified packaging passed.
+Focused regression tests passed. The full required check completed 23 of 24 tasks;
+the desktop suite passed 3,834 tests with five skips and seven unrelated UI timing
+failures under system load. All five affected files then passed (24 tests) with
+two workers and a 20-second test timeout; test assertions were unchanged. An
+earlier new likes test fixture was corrected to use a valid cursor and passed.

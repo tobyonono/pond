@@ -72,13 +72,33 @@ CSC_IDENTITY_AUTO_DISCOVERY=false pnpm exec electron-builder --config electron-b
 ```
 
 `electron-builder.fork.yml` retains Pond's application identity and Library
-location, marks the version `1.2.0-fork.1`, and disables publishing. Fork-marked
+location, marks the version `1.2.0-fork.2`, and disables publishing. Fork-marked
 builds disable the updater, including manual download and installation paths,
 so an upstream release cannot replace custom changes. This local package is
-unsigned and not notarized. The extension is labelled **Pond (Toby)** and keeps
+ad-hoc signed and not notarized. Packaging verifies the complete signature after
+signing. A Developer ID signature is still needed for a distributed macOS release
+and stable Keychain trust across updates. The extension is labelled **Pond (Toby)** and keeps
 the same unpacked extension ID, preserving its settings and native-host access.
 
 Before replacing an installed version, quit Pond and back up both the Library
 and its application-support directory. Keep the original app and extension for
 rollback. Reusing the same app identity avoids importing the existing Library
 again. Automatic browser-folder sync is opt-in after the extension is updated.
+
+## Source setup and Instagram pacing
+
+**Sources → New Source** and **New → Sources → New Source** include Goodreads,
+Letterboxd and Bookmark Folders. These open their import setup; they do not claim
+unsupported full-history account connections. Continuous bookmark folder watching
+is configured in the Chrome extension's **Bookmark Folders** screen.
+
+The desktop's Instagram capture sessions serialize API requests through the shared
+persistent governor, including saved-feed pagination, likes and collection pages.
+The local targets are a minimum 15-second gap with jitter, at most four requests
+per minute, 60 per hour and 200 per day, shared across accounts. Window acquisition
+also consumes a permit, so these are upper ceilings, not a promised throughput.
+A 429 starts at least a 15-minute cooldown; repeated signals increase the fallback
+and longer server Retry-After values take priority. Pending requests are cancelled
+when their capture window is released. These conservative local policies cannot
+guarantee that Instagram will never rate-limit an account. Likes hydration allows
+more time for the slower API responses.

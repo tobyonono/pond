@@ -21,7 +21,11 @@ function payload(...parts: string[]) {
   return `for (;;);{"payload":{"layout":{"bloks_payload":"${parts.join(", ")}"}}}`;
 }
 
-function run(firstPage: string, laterPages: Array<string | Error>) {
+function run(
+  firstPage: string,
+  laterPages: Array<string | Error>,
+  status = 200,
+) {
   const pages = [...laterPages];
   const context = {
     location: { pathname: "/your_activity/interactions/likes/" },
@@ -38,7 +42,7 @@ function run(firstPage: string, laterPages: Array<string | Error>) {
     fetch: async () => {
       const page = pages.shift() ?? payload();
       if (page instanceof Error) throw page;
-      return { ok: true, status: 200, text: async () => page };
+      return { ok: status === 200, status, text: async () => page };
     },
   };
   const result = runInNewContext(
@@ -70,6 +74,18 @@ describe("Instagram likes", () => {
       }),
       expect.objectContaining({ sourceId: "DeKLFh4xGXE" }),
     ]);
+  });
+
+  it("reports rate limiting even after reading some likes", async () => {
+    const result = await run(
+      payload(
+        item("DeEvTWUNxvZ", "feed", 1),
+        nextMarker("QVFCdTk4Nkt2ZXZES1Q3ckJ2SkNm=="),
+      ),
+      [],
+      429,
+    );
+    expect(result).toEqual({ ok: false, reason: "rate_limited" });
   });
 
   it("still reads unminified action names", async () => {

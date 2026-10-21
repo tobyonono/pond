@@ -1,6 +1,7 @@
 import { IconPlus } from "@pond/icons";
 import { Menu } from "@pond/ui";
 import { useQueryClient } from "@tanstack/react-query";
+import { openReferenceImport } from "@/features/library/imports";
 import { startConnect, startWatch } from "@/features/sources/lib/create";
 import { buildSourceNewMenuItems } from "@/features/sources/lib/create-menu";
 import { pickWatchedFolder } from "@/features/sources/lib/watched-folder";
@@ -55,6 +56,7 @@ export function NewSourceMenu({
             <Menu.Items
               items={buildSourceNewMenuItems({
                 onConnect: (source) => void startConnect(source),
+                onImport: openReferenceImport,
                 onWatch: startWatch,
                 onFolder: chooseWatchedFolder,
               })}

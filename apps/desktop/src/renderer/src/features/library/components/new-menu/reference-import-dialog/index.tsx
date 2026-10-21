@@ -20,7 +20,7 @@ const HELP = {
   letterboxd:
     "Choose your unzipped Letterboxd export, or import recent activity using your username. RSS does not include your full watchlist.",
   bookmarks:
-    "Choose a browser HTML export or Chromium Bookmarks file, then select folders. Selected folders include their subfolders.",
+    "Choose a browser HTML export or Chromium Bookmarks file, then select folders. Selected folders include their subfolders. For automatic capture of new Chrome bookmarks, open Bookmark Folders in the Pond extension and choose folders to watch.",
 };
 
 function folderLabel(

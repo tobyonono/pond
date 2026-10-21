@@ -1,7 +1,7 @@
 export { BrandTile } from "./components/sync-monitor-source-tile";
 export { useAccounts } from "./hooks/use-accounts";
 export {
-  connectableSourceItems,
+  sourceSetupItems,
   watchableSourceItems,
 } from "./lib/create-menu";
 export { openSources } from "./lib/open";

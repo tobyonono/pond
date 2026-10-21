@@ -2,10 +2,11 @@
 # credentials, native host and Dock shortcut continue to work.
 extends: electron-builder.yml
 extraMetadata:
-  version: 1.2.0-fork.1
+  version: 1.2.0-fork.2
 publish: null
+afterSign: scripts/verify-fork-signature.cjs
 mac:
   notarize: false
-  identity: null
+  identity: "-"
   extendInfo:
     PondDistribution: tobyonono/pond

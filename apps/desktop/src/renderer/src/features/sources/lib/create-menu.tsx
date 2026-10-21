@@ -1,6 +1,7 @@
 import { IconEye, IconFolderOpen, IconUserPlus } from "@pond/icons";
 import type { Source } from "@pond/schema/db";
 import type { MenuItemSpec } from "@pond/ui";
+import type { ReferenceImportSource } from "@shared/reference-import-contracts";
 import type { ReactNode } from "react";
 import { BrandTile } from "@/features/sources/components/sync-monitor-source-tile";
 import { getSourceDef } from "@/features/sources/lib/registry";
@@ -10,7 +11,7 @@ function sourceMenuIcon(source: Source): ReactNode {
   return <BrandTile source={source} size={16} />;
 }
 
-export function connectableSourceItems(
+function connectableSourceItems(
   onPick: (source: Source) => void,
 ): MenuItemSpec[] {
   return CONNECTABLE.map((source) => {
@@ -23,6 +24,26 @@ export function connectableSourceItems(
       onClick: () => onPick(source),
     };
   });
+}
+
+export function sourceSetupItems(handlers: {
+  onConnect: (source: Source) => void;
+  onImport: (source: ReferenceImportSource) => void;
+}): MenuItemSpec[] {
+  return [
+    ...connectableSourceItems(handlers.onConnect),
+    ...(["goodreads", "letterboxd", "bookmarks"] as const).map((source) => ({
+      id: `import-${source}`,
+      label:
+        source === "bookmarks"
+          ? "Bookmark Folders"
+          : getSourceDef(source).label,
+      icon:
+        source === "bookmarks" ? <IconFolderOpen /> : sourceMenuIcon(source),
+      keywords: `new source import ${source} shelves movies browser`,
+      onClick: () => handlers.onImport(source),
+    })),
+  ];
 }
 
 export function watchableSourceItems(
@@ -42,6 +63,7 @@ export function watchableSourceItems(
 
 export function buildSourceNewMenuItems(handlers: {
   onConnect: (source: Source) => void;
+  onImport: (source: ReferenceImportSource) => void;
   onWatch: (source: Source) => void;
   onFolder: () => void;
 }): MenuItemSpec[] {
@@ -52,7 +74,7 @@ export function buildSourceNewMenuItems(handlers: {
       label: "New Source",
       icon: <IconUserPlus />,
       keywords: "connect account sync",
-      items: connectableSourceItems(handlers.onConnect),
+      items: sourceSetupItems(handlers),
     },
     {
       type: "submenu",

@@ -4,6 +4,7 @@ import { BrowserWindow, session } from "electron";
 import { resolvePreload } from "../../../lib/resolve-preload";
 import { acquire, sourcePausedUntil } from "../../pipeline/rate-governor";
 import { browserUserAgent, PARTITION } from "./constants";
+import { paceInstagramCapture } from "./instagram-request-pacing";
 
 export const GLOBAL_POOL_CAP = 3;
 
@@ -14,7 +15,7 @@ const PER_SOURCE_CAP = {
   goodreads: 1,
   letterboxd: 1,
   twitter: 3,
-  instagram: 2,
+  instagram: 1,
   tiktok: 2,
   youtube: 2,
   cosmos: 2,
@@ -123,12 +124,15 @@ function claimSlot(slot: PoolSlot, source: Source): Lease {
   slot.busy = true;
   slot.source = source;
   busyBySource[source] += 1;
+  const stopPacing =
+    source === "instagram" ? paceInstagramCapture(slot.win) : null;
   let released = false;
   return {
     win: slot.win,
     release: () => {
       if (released) return;
       released = true;
+      stopPacing?.();
       slot.busy = false;
       slot.source = null;
       busyBySource[source] = Math.max(0, busyBySource[source] - 1);

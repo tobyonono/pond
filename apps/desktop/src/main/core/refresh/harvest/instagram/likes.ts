@@ -166,7 +166,8 @@ async function inPageInstagramLikes(
 
   let pane: HTMLElement | null = null;
   let next: NextPage | null = null;
-  const hydrateDeadline = Date.now() + 30_000;
+  // API hydration shares the request governor with list pages.
+  const hydrateDeadline = Date.now() + 120_000;
   while (Date.now() < hydrateDeadline) {
     next = drain() ?? next;
     if (globalThis.__pondIgLikesRequest && next) break;
@@ -195,6 +196,9 @@ async function inPageInstagramLikes(
     await sleep(args.pageDelayMs);
     const res = await fetch(template.url, init);
     if (!res.ok) {
+      if (res.status === 429) return { ok: false, reason: "rate_limited" };
+      if (res.status === 401 || res.status === 403)
+        return { ok: false, reason: "auth_required" };
       if (entries.length > 0) return done(false);
       return {
         ok: false,

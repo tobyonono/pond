@@ -56,10 +56,10 @@ export const SOURCE_DESCRIPTORS = [
     sync: {
       strategy: "cursor",
       rate: {
-        minDelayMs: 2500,
-        maxPerWindow: 30,
-        maxPerHour: 120,
-        maxPerDay: 600,
+        minDelayMs: 15_000,
+        maxPerWindow: 4,
+        maxPerHour: 60,
+        maxPerDay: 200,
       },
     },
   },
