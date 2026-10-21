@@ -1,0 +1,19 @@
+docs/artifact-source-validation.md
+  s_02c7375839359f::t_4b10949dc59fa4 115-139
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b32d26a5020671baa64aefe9c3f97e584ffd7614",
+  "prompts": {},
+  "sessions": {
+    "s_02c7375839359f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a125d1-8f62-70a1-9cc4-aeaf3fe5150d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Toby Onono <ononop@tcd.ie>"
+    }
+  }
+}
