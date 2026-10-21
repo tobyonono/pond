@@ -1,0 +1,59 @@
+apps/desktop/electron-builder.fork.yml
+  s_02c7375839359f::t_67c11c7a7c53eb 5,7,10
+apps/desktop/scripts/verify-fork-signature.cjs
+  s_02c7375839359f::t_de4e20fdc94fd3 1-16
+apps/desktop/src/main/core/pipeline/rate-governor.ts
+  s_02c7375839359f::t_7fe1fa81fc9de5 28,335-339
+apps/desktop/src/main/core/pipeline/rate-limit-cooldown.test.ts
+  s_02c7375839359f::t_ba00af1dd26b32 1-19
+apps/desktop/src/main/core/pipeline/rate-limit-cooldown.ts
+  s_02c7375839359f::t_e261b1e658c2db 1-17
+apps/desktop/src/main/core/refresh/harvest-window/instagram-request-gate.test.ts
+  s_02c7375839359f::t_4f48fbaed6e034 1-75
+apps/desktop/src/main/core/refresh/harvest-window/instagram-request-gate.ts
+  s_02c7375839359f::t_116258aa340a5b 1-67
+apps/desktop/src/main/core/refresh/harvest-window/instagram-request-pacing.ts
+  s_02c7375839359f::t_23d0b6913d4c61 1-40
+apps/desktop/src/main/core/refresh/harvest-window/pool.ts
+  s_02c7375839359f::t_ab74abf385053f 7,18,127-128,135
+apps/desktop/src/main/core/refresh/harvest/instagram/likes.ts
+  s_02c7375839359f::t_1eeef7712688f2 169-170,199-201
+apps/desktop/src/renderer/src/features/library/components/new-menu/reference-import-dialog/index.tsx
+  s_02c7375839359f::t_e6914328978ade 23
+apps/desktop/src/renderer/src/features/library/components/new-menu/spec.test.ts
+  s_02c7375839359f::t_543c58b40ba12b 68-70
+apps/desktop/src/renderer/src/features/library/components/new-menu/spec.tsx
+  s_02c7375839359f::t_417fda37541f60 41,299-303
+apps/desktop/src/renderer/src/features/library/imports.ts
+  s_02c7375839359f::t_d015d48c5e68be 1-6
+apps/desktop/src/renderer/src/features/sources/components/new-menu/index.tsx
+  s_02c7375839359f::t_901ad4945d831d 4,59
+apps/desktop/src/renderer/src/features/sources/index.ts
+  s_02c7375839359f::t_e110a5fa04f3b5 4
+apps/desktop/src/renderer/src/features/sources/lib/create-menu.test.ts
+  s_02c7375839359f::t_6dd13e8ae440bb 14,27-29,49,80-104,110
+apps/desktop/src/renderer/src/features/sources/lib/create-menu.tsx
+  s_02c7375839359f::t_ac43adfe394be1 4,14,29-48,66,77
+docs/artifact-source-setup.md
+  s_02c7375839359f::t_cdbaa271471d78 75,78-80,87-104
+docs/artifact-source-validation.md
+  s_02c7375839359f::t_6a325f8617515a 50-75
+packages/schema/src/sources/registry.ts
+  s_02c7375839359f::t_7568af21f93fd1 59-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "53ee230ae2aa0f7892ae8681317ccf6c75d4708e",
+  "prompts": {},
+  "sessions": {
+    "s_02c7375839359f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a125d1-8f62-70a1-9cc4-aeaf3fe5150d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Toby Onono <ononop@tcd.ie>"
+    }
+  }
+}
