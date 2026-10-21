@@ -32,3 +32,15 @@ export function createRateLimit(
     return true;
   };
 }
+
+export function acceptHookSourceChange(
+  source: ExternalSource,
+  requested: string | undefined,
+  settings: PondSettings,
+): "goodreads" | "letterboxd" | null {
+  return (source === "goodreads" || source === "letterboxd") &&
+    source === requested &&
+    settings.enabled[source]
+    ? source
+    : null;
+}

@@ -13,6 +13,10 @@ function emit(message: PondMessage): void {
   window.postMessage({ type: POND_EVENT, message }, "*");
 }
 
+export function sourceChanged(source: "goodreads" | "letterboxd"): void {
+  emit({ kind: "sourceChanged", source });
+}
+
 export function capture(url: string, trigger: string): void {
   emit({ kind: "capture", payload: { url, trigger } });
 }

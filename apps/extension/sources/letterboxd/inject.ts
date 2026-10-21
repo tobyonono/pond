@@ -1,18 +1,17 @@
-import { capture, installInterceptor } from "@/utils/intercept";
+import { capture, installInterceptor, sourceChanged } from "@/utils/intercept";
 import { asText, at, parseJsonValue } from "@/utils/json";
-import { letterboxdSavedIds } from "./save-request";
+import { letterboxdActivityIds, letterboxdSavedIds } from "./save-request";
 
-function filmUrl(id: string): string {
+function filmUrl(id: string): string | null {
   for (const element of document.querySelectorAll<HTMLElement>(
     "[data-postered-identifier][data-item-link]",
   )) {
+    const identifier = parseJsonValue(
+      element.getAttribute("data-postered-identifier"),
+    );
     if (
-      asText(
-        at(
-          parseJsonValue(element.getAttribute("data-postered-identifier")),
-          "lid",
-        ),
-      ) !== id
+      asText(at(identifier, "lid")) !== id &&
+      asText(at(identifier, "uid")) !== id
     )
       continue;
     const link = element.getAttribute("data-item-link");
@@ -21,29 +20,50 @@ function filmUrl(id: string): string {
   const identifier = document.querySelector<HTMLMetaElement>(
     'meta[name="production:identifier"]',
   )?.content;
-  if (asText(at(parseJsonValue(identifier ?? null), "lid")) === id) {
+  const production = parseJsonValue(identifier ?? null);
+  if (
+    asText(at(production, "lid")) === id ||
+    asText(at(production, "uid")) === id
+  ) {
     const canonical = document.querySelector<HTMLLinkElement>(
       'link[rel="canonical"]',
     )?.href;
     if (canonical?.startsWith("https://letterboxd.com/film/")) return canonical;
   }
-  return `https://boxd.it/${id}`;
+  return /^[A-Za-z0-9]+$/.test(id) ? `https://boxd.it/${id}` : null;
 }
 
 export function inject(): void {
   installInterceptor({
     id: "letterboxd",
     match: (request) =>
-      /\/me\/watchlist\/|\/watchlist\/add-films\/?/.test(request.url),
+      /\/me\/watchlist\/|\/watchlist\/add-films\/?|\/s\/film:\d+\/watch\/?|\/s\/save-diary-entry/.test(
+        request.url,
+      ),
     async onResponse(request, response) {
       if (!response.ok) return;
-      const ids = letterboxdSavedIds(
+      const body = await request.readBody();
+      const json = parseJsonValue(await response.readText());
+      for (const id of letterboxdSavedIds(
         request.url,
         request.method,
-        await request.readBody(),
-        parseJsonValue(await response.readText()),
-      );
-      for (const id of ids) capture(filmUrl(id), "letterboxd:watchlist");
+        body,
+        json,
+      )) {
+        sourceChanged("letterboxd");
+        const url = filmUrl(id);
+        if (url) capture(url, "letterboxd:watchlist");
+      }
+      for (const action of letterboxdActivityIds(
+        request.url,
+        request.method,
+        body,
+        json,
+      )) {
+        sourceChanged("letterboxd");
+        const url = filmUrl(action.id);
+        if (url) capture(url, `letterboxd:${action.trigger}`);
+      }
     },
   });
 }

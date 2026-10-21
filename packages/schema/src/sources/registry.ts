@@ -21,6 +21,15 @@ export const SOURCE_DESCRIPTORS = [
     label: "Goodreads",
     hosts: ["goodreads.com"],
     urlPatterns: [/^https?:\/\/(?:www\.)?goodreads\.com\/book\/show\/(\d+)/i],
+    sync: {
+      strategy: "cursor",
+      rate: {
+        minDelayMs: 5_000,
+        maxPerWindow: 8,
+        maxPerHour: 100,
+        maxPerDay: 400,
+      },
+    },
   },
   {
     id: "letterboxd",
@@ -31,6 +40,15 @@ export const SOURCE_DESCRIPTORS = [
       /^https?:\/\/(?:www\.)?letterboxd\.com\/[^/]+\/film\/([^/?#]+)/i,
       /^https?:\/\/boxd\.it\/([A-Za-z0-9]+)/i,
     ],
+    sync: {
+      strategy: "cursor",
+      rate: {
+        minDelayMs: 5_000,
+        maxPerWindow: 8,
+        maxPerHour: 100,
+        maxPerDay: 400,
+      },
+    },
   },
   {
     id: "twitter",

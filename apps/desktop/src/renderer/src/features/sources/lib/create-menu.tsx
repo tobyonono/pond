@@ -32,14 +32,10 @@ export function sourceSetupItems(handlers: {
 }): MenuItemSpec[] {
   return [
     ...connectableSourceItems(handlers.onConnect),
-    ...(["goodreads", "letterboxd", "bookmarks"] as const).map((source) => ({
+    ...(["bookmarks"] as const).map((source) => ({
       id: `import-${source}`,
-      label:
-        source === "bookmarks"
-          ? "Bookmark Folders"
-          : getSourceDef(source).label,
-      icon:
-        source === "bookmarks" ? <IconFolderOpen /> : sourceMenuIcon(source),
+      label: "Bookmark Folders",
+      icon: <IconFolderOpen />,
       keywords: `new source import ${source} shelves movies browser`,
       onClick: () => handlers.onImport(source),
     })),

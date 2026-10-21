@@ -1,4 +1,4 @@
-import { capture, installInterceptor } from "@/utils/intercept";
+import { capture, installInterceptor, sourceChanged } from "@/utils/intercept";
 import { parseJsonValue } from "@/utils/json";
 import { collectGoodreadsBookIds, goodreadsSaveRequest } from "./save-request";
 
@@ -23,11 +23,13 @@ export function inject(): void {
         data,
         (id) => ids.get(id) ?? null,
       );
-      if (saved)
+      if (saved) {
+        sourceChanged("goodreads");
         capture(
           `https://www.goodreads.com/book/show/${saved.bookId}`,
-          "goodreads:shelf",
+          saved.shelf === "rated" ? "goodreads:rating" : "goodreads:shelf",
         );
+      }
     },
   });
 }

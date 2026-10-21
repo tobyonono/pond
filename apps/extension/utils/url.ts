@@ -21,7 +21,9 @@ export function cookieDomainsForSource(source: Source): string[] {
     case "threads":
       return ["threads.net", "threads.com", "instagram.com"];
     case "goodreads":
+      return ["goodreads.com"];
     case "letterboxd":
+      return ["letterboxd.com"];
     case "web":
     case "local":
       return [];

@@ -65,6 +65,7 @@ import { sleep } from "./util";
 
 interface SourceListArgs extends ListHarvestArgs {
   accountKey?: string;
+  freshLimit?: number;
   /** Instagram and TikTok: walks one saved collection. */
   collectionId?: string;
   /** TikTok puts the collection name in its URL. */
@@ -159,6 +160,11 @@ export async function harvestSourceList(
     partition?: string;
   } = {},
 ): Promise<ListHarvestResult> {
+  if (source === "goodreads" || source === "letterboxd") {
+    const { harvestReferenceLibrary } = await import("../harvest/reference");
+    const { PARTITION } = await import("./constants");
+    return harvestReferenceLibrary(source, args, opts.partition ?? PARTITION);
+  }
   if (source === "reddit") {
     const { harvestRedditLists } = await import("../harvest/reddit/api");
     return harvestRedditLists(args, opts.partition);
@@ -474,6 +480,11 @@ export async function listSourceCollections(
         })),
       };
     }
+    case "goodreads":
+    case "letterboxd": {
+      const { listReferenceCollections } = await import("../harvest/reference");
+      return listReferenceCollections(source, opts.accountKey, opts.partition);
+    }
     case "youtube": {
       const run = await runOnSourcePage(
         "youtube",
@@ -544,6 +555,11 @@ export async function harvestSourceCollections(
   opts: { partition: string },
 ): Promise<ListHarvestResult> {
   switch (source) {
+    case "goodreads":
+    case "letterboxd": {
+      const { harvestReferenceLibrary } = await import("../harvest/reference");
+      return harvestReferenceLibrary(source, args, opts.partition, collections);
+    }
     case "pinterest": {
       const { harvestPinterestBoards } = await import(
         "../harvest/pinterest/resource"

@@ -154,6 +154,8 @@ export async function probeUserHandle(
 }
 
 function probeUrlForSource(source: Source): string {
+  if (source === "goodreads") return "https://www.goodreads.com/review/list";
+  if (source === "letterboxd") return "https://letterboxd.com/";
   if (source === "tiktok") return "https://www.tiktok.com/";
   if (source === "arena") return "https://www.are.na/";
   if (source === "twitter") return "https://x.com/home";

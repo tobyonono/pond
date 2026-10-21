@@ -20,14 +20,22 @@ export function goodreadsSaveRequest(
   const errors = at(response, "errors");
   if (!isRecord(request) || (Array.isArray(errors) && errors.length > 0))
     return null;
-  if (
-    asText(request.operationName) !== "ShelveBook" &&
-    !asText(request.query)?.includes("mutation ShelveBook")
-  )
-    return null;
-  if (!isRecord(at(response, "data", "shelveBook", "shelving"))) return null;
+  const operation =
+    asText(request.operationName) ??
+    asText(request.query)?.match(/mutation\s+(\w+)/)?.[1];
+  let shelf: string | undefined;
+  if (operation === "ShelveBook") {
+    if (!isRecord(at(response, "data", "shelveBook", "shelving"))) return null;
+    shelf = asText(at(request, "variables", "input", "shelfName"));
+  } else if (operation === "RateBook") {
+    if (!isRecord(at(response, "data", "rateBook", "review"))) return null;
+    shelf = "rated";
+  } else if (operation === "TagBook") {
+    if (!Array.isArray(at(response, "data", "tagBook", "taggings")))
+      return null;
+    shelf = "tagged";
+  } else return null;
   const id = asText(at(request, "variables", "input", "id"));
-  const shelf = asText(at(request, "variables", "input", "shelfName"));
   if (!id || !shelf) return null;
   const bookId = /^\d+$/.test(id) ? id : resolveBook(id);
   return bookId && /^\d+$/.test(bookId) ? { bookId, shelf } : null;

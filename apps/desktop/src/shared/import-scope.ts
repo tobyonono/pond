@@ -42,8 +42,16 @@ const SAVED_AND_LIKED: readonly ListKind[] = ["saved", "liked"];
 const ALL_MEDIA: readonly ImportMediaKind[] = ["image", "video", "text"];
 
 const IMPORT_SCOPE_OPTIONS = {
-  goodreads: EVERYTHING_ONLY,
-  letterboxd: EVERYTHING_ONLY,
+  goodreads: {
+    ...EVERYTHING_ONLY,
+    collections: "collection",
+    fileEveryCollection: true,
+  },
+  letterboxd: {
+    ...EVERYTHING_ONLY,
+    collections: "collection",
+    fileEveryCollection: true,
+  },
   twitter: {
     listKinds: SAVED_AND_LIKED,
     collections: "folder",

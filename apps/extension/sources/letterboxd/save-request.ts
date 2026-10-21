@@ -42,3 +42,30 @@ export function letterboxdSavedIds(
   }
   return [];
 }
+
+/** Current first-party watched toggle and diary form use a production UID, not a short-link id. */
+export function letterboxdActivityIds(
+  url: string,
+  method: string,
+  body: string | null,
+  response: JsonValue,
+): Array<{ id: string; trigger: "watched" | "diary" }> {
+  if (
+    method !== "POST" ||
+    !body ||
+    !isRecord(response) ||
+    response.result !== true ||
+    response.error
+  )
+    return [];
+  const path = new URL(url, "https://letterboxd.com").pathname;
+  const form = new URLSearchParams(body);
+  const watched = path.match(/^\/s\/(film:\d+)\/watch\/?$/)?.[1];
+  if (watched && form.get("watched") === "true" && response.watched === true)
+    return [{ id: watched, trigger: "watched" }];
+  if (/^\/s\/save-diary-entry\/?$/.test(path) && form.get("draft") !== "true") {
+    const uid = form.get("viewingableUid");
+    if (uid && /^film:\d+$/.test(uid)) return [{ id: uid, trigger: "diary" }];
+  }
+  return [];
+}

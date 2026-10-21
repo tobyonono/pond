@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { onMessage } from "@/utils/messaging";
+import { nativeCall } from "@/utils/native";
 import { ensureSettings, getSettings, watchSettings } from "@/utils/settings";
 import { startBookmarkSync } from "./bookmarks";
 import { saveFromSite } from "./capture";
@@ -18,6 +19,17 @@ const pondPathSchema = z
 
 export default defineBackground(() => {
   startBookmarkSync();
+  const lastSourceChange = new Map<string, number>();
+  onMessage("sourceChanged", async ({ data, sender }) => {
+    const host = sender.tab?.url ? new URL(sender.tab.url).hostname : "";
+    const domain =
+      data.source === "goodreads" ? "goodreads.com" : "letterboxd.com";
+    if (host !== domain && !host.endsWith(`.${domain}`)) return;
+    const last = lastSourceChange.get(data.source) ?? 0;
+    if (Date.now() - last < 30_000) return;
+    lastSourceChange.set(data.source, Date.now());
+    await nativeCall({ type: "source.changed", source: data.source });
+  });
   browser.runtime.onInstalled.addListener(async () => {
     await ensureSettings();
     clearBadge();

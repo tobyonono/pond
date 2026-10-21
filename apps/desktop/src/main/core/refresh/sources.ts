@@ -20,9 +20,9 @@ export function homeUrlForSource(source: Source): string {
     case "threads":
       return "https://www.threads.com/login";
     case "goodreads":
-      return "https://www.goodreads.com/";
+      return "https://www.goodreads.com/user/sign_in";
     case "letterboxd":
-      return "https://letterboxd.com/";
+      return "https://letterboxd.com/sign-in/";
     case "web":
       return "";
     case "local":

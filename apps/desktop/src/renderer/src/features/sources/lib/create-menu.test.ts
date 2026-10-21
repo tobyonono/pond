@@ -15,6 +15,8 @@ describe("source create menu", () => {
     });
     expect(labels(items)).toEqual([
       "New Source",
+      "Goodreads",
+      "Letterboxd",
       "Twitter",
       "Instagram",
       "Pinterest",
@@ -24,8 +26,6 @@ describe("source create menu", () => {
       "YouTube",
       "Reddit",
       "Threads",
-      "Goodreads",
-      "Letterboxd",
       "Bookmark Folders",
       "New Watch",
       "Twitter",
@@ -90,7 +90,7 @@ describe("source create menu", () => {
       (item) => item.type === "submenu" && item.id === "new-source",
     );
     if (menu?.type !== "submenu") throw new Error("Missing New Source");
-    for (const source of ["goodreads", "letterboxd", "bookmarks"]) {
+    for (const source of ["bookmarks"]) {
       const item = menu.items.find(
         (entry) => "id" in entry && entry.id === `import-${source}`,
       );
@@ -98,8 +98,32 @@ describe("source create menu", () => {
       item.onClick?.();
       expect(onImport).toHaveBeenLastCalledWith(source);
     }
-    expect(onImport).toHaveBeenCalledTimes(3);
+    expect(onImport).toHaveBeenCalledTimes(1);
     expect(onConnect).not.toHaveBeenCalled();
+  });
+
+  it("connects Goodreads and Letterboxd through the normal account flow", () => {
+    const onConnect = vi.fn();
+    const onImport = vi.fn();
+    const items = buildSourceNewMenuItems({
+      onConnect,
+      onImport,
+      onWatch: vi.fn(),
+      onFolder: vi.fn(),
+    });
+    const menu = items.find(
+      (item) => item.type === "submenu" && item.id === "new-source",
+    );
+    if (menu?.type !== "submenu") throw new Error("Missing sources");
+    for (const source of ["goodreads", "letterboxd"]) {
+      const item = menu.items.find(
+        (item) => "id" in item && item.id === `connect-${source}`,
+      );
+      if (!item || !("onClick" in item)) throw new Error(`Missing ${source}`);
+      item.onClick?.();
+      expect(onConnect).toHaveBeenLastCalledWith(source);
+    }
+    expect(onImport).not.toHaveBeenCalled();
   });
 
   it("uses source tiles so light logos stay visible on the menu", () => {

@@ -86,6 +86,7 @@ export type ToolResult = { ok: true } | { ok: false; message: string };
 
 interface PondProtocol {
   capture(payload: PondCapturePayload): CaptureOutcome;
+  sourceChanged(payload: { source: "goodreads" | "letterboxd" }): void;
   runTool(input: { tabId: number; tool: CaptureTool }): ToolResult;
   overlayResult(result: OverlayResult): void;
   gesture(gesture: Gesture): void;

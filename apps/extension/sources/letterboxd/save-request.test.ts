@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { letterboxdSavedIds } from "./save-request";
+import { letterboxdActivityIds, letterboxdSavedIds } from "./save-request";
 
 describe("Letterboxd watchlist capture", () => {
   it("captures current watchlist additions and ignores removals", () => {
@@ -56,6 +56,54 @@ describe("Letterboxd watchlist capture", () => {
     ).toEqual([]);
     expect(
       letterboxdSavedIds("/me/likes/ATh8", "PATCH", '{"inWatchlist":true}', {}),
+    ).toEqual([]);
+  });
+});
+
+describe("Letterboxd watched and logged capture", () => {
+  it("captures a confirmed watched toggle and ignores unwatch and failed requests", () => {
+    expect(
+      letterboxdActivityIds("/s/film:738292/watch/", "POST", "watched=true", {
+        result: true,
+        watched: true,
+      }),
+    ).toEqual([{ id: "film:738292", trigger: "watched" }]);
+    expect(
+      letterboxdActivityIds("/s/film:738292/watch/", "POST", "watched=false", {
+        result: true,
+        watched: false,
+      }),
+    ).toEqual([]);
+    expect(
+      letterboxdActivityIds("/s/film:738292/watch/", "POST", "watched=true", {
+        result: false,
+      }),
+    ).toEqual([]);
+  });
+  it("captures a logged film and excludes drafts and non-film productions", () => {
+    expect(
+      letterboxdActivityIds(
+        "/s/save-diary-entry",
+        "POST",
+        "viewingableUid=film%3A738292&specifiedDate=true",
+        { result: true },
+      ),
+    ).toEqual([{ id: "film:738292", trigger: "diary" }]);
+    expect(
+      letterboxdActivityIds(
+        "/s/save-diary-entry",
+        "POST",
+        "viewingableUid=film%3A738292&draft=true",
+        { result: true },
+      ),
+    ).toEqual([]);
+    expect(
+      letterboxdActivityIds(
+        "/s/save-diary-entry",
+        "POST",
+        "viewingableUid=series%3A738292",
+        { result: true },
+      ),
     ).toEqual([]);
   });
 });

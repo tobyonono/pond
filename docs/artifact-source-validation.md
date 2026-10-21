@@ -73,3 +73,42 @@ the desktop suite passed 3,834 tests with five skips and seven unrelated UI timi
 failures under system load. All five affected files then passed (24 tests) with
 two workers and a 20-second test timeout; test assertions were unchanged. An
 earlier new likes test fixture was corrected to use a valid cursor and passed.
+
+
+## Connected sources — 2026-10-21
+
+Goodreads and Letterboxd now use the existing connected-Account flow, rather than
+opening export-import shortcuts. Both share the original import-scope, initial
+history, scheduled sync, pause and reconnect paths. Goodreads discovers shelves;
+Letterboxd supplies Watchlist, Watched, Diary / Logged and Liked Films. Existing
+CSV/export imports remain separate. Chrome hooks notify existing Accounts after
+confirmed save actions and respect source enablement and the selected scope.
+
+Validation before installation:
+
+- All 18 static-check tasks passed: generation, formatting, Oxlint, architecture,
+  Knip and TypeScript checks.
+- Full desktop suite: 573 files passed, two skipped; 3,857 tests passed, five
+  skipped, with two workers and a 20-second per-test timeout.
+- Extension suite: 14 files and 77 tests passed.
+- All six desktop/Chrome/Firefox production-build tasks passed.
+- Chrome output: 1,848,405 bytes; background worker: 137,044 bytes, both within
+  their existing budgets.
+- Current first-party public pages parsed successfully: a Goodreads shelf feed
+  and its distinct second page, 72 Letterboxd watched films with pagination,
+  and 50 diary rows with pagination. These checks are separate from offline tests.
+
+The installed fork.3 passed strict signature verification. Chrome's existing
+unpacked extension was reloaded and visibly reported 1.2.1 (Toby fork), enabled.
+Goodreads connected through the user's existing signed-in browser session and
+opened the standard Account import controls. Live shelf discovery then exposed
+an unbound account-handle callback; the reference extractor now preserves its
+source identity when that callback is passed by value. The three account-identity
+regression tests pass, including both extracted callbacks. The corrected app is
+packaged as fork.4; installation and live verification are recorded below.
+
+The user identified the password dialog as macOS access to "Pond Safe Storage"
+and selected Always Allow directly in that system dialog. No password was read,
+stored in source code, or entered by the agent. Valid ad-hoc signatures preserve
+encryption but do not establish a stable Developer ID identity across local
+builds. A new build can require Keychain approval again.

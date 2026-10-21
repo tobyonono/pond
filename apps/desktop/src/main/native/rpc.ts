@@ -38,6 +38,7 @@ export interface NativeTag {
 }
 
 export interface NativePorts {
+  sourceChanged?: (source: "goodreads" | "letterboxd") => void;
   captureBookmark?: (input: BrowserBookmarkInput) => Promise<EnqueueResult>;
   capture?: (
     draft: CaptureWebDraft,
@@ -69,6 +70,10 @@ export async function dispatchNative(
   const req = parsed.data;
   try {
     switch (req.type) {
+      case "source.changed":
+        if (!ports.sourceChanged) return { ok: false, error: "invalid" };
+        ports.sourceChanged(req.source);
+        return { ok: true, data: { queued: true } };
       case "bookmarks.capture":
         if (!ports.captureBookmark) return { ok: false, error: "invalid" };
         if ((await ports.libraryInfo()).path !== req.libraryPath)

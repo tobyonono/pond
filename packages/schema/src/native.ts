@@ -44,6 +44,10 @@ export const nativeRequestSchema = z.discriminatedUnion("type", [
     title: z.string().max(4096),
     folderPath: z.array(z.string().max(1024)).max(64),
   }),
+  z.object({
+    type: z.literal("source.changed"),
+    source: z.enum(["goodreads", "letterboxd"]),
+  }),
   z.object({ type: z.literal("hello") }),
   z.object({
     type: z.literal("capture.accept"),

@@ -18,6 +18,7 @@ export interface PondLogEntry {
 
 /** Shape posted by injected MAIN-world scripts over `window.postMessage` before the content-script bridge relays it to the background. */
 export type PondMessage =
+  | { kind: "sourceChanged"; source: "goodreads" | "letterboxd" }
   | { kind: "capture"; payload: PondCapturePayload }
   | {
       kind: "log";

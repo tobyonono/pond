@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { JsonValue } from "@/utils/json";
 import { collectGoodreadsBookIds, goodreadsSaveRequest } from "./save-request";
 
 describe("Goodreads save capture", () => {
@@ -52,6 +53,30 @@ describe("Goodreads save capture", () => {
         () => "4671",
       ),
     ).toBeNull();
+  });
+
+  it("captures ratings and custom shelf tags only after a successful mutation", () => {
+    const cases: Array<[string, string, JsonValue, string]> = [
+      ["RateBook", "rateBook", { review: { id: "review" } }, "rated"],
+      [
+        "TagBook",
+        "tagBook",
+        { taggings: [{ tag: { name: "design" } }] },
+        "tagged",
+      ],
+    ];
+    for (const [operationName, field, value, shelf] of cases) {
+      const body = JSON.stringify({
+        operationName,
+        variables: { input: { id: "4671" } },
+      });
+      expect(
+        goodreadsSaveRequest(body, { data: { [field]: value } }, () => null),
+      ).toEqual({ bookId: "4671", shelf });
+      expect(
+        goodreadsSaveRequest(body, { data: { [field]: null } }, () => null),
+      ).toBeNull();
+    }
   });
 
   it("accepts a numeric ID without reading unrelated page data", () => {

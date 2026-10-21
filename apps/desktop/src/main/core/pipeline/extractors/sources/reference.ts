@@ -38,7 +38,41 @@ const defaultDependencies: ReferenceDependencies = {
 export class ReferenceExtractor implements Extractor {
   readonly id: string;
   readonly validUrl: readonly RegExp[];
-  readonly cookieDomain = null;
+  get cookieDomain(): string {
+    return this.source === "goodreads" ? ".goodreads.com" : ".letterboxd.com";
+  }
+
+  get probeExpression(): string {
+    if (this.source === "letterboxd")
+      return `(() => {
+      const person = window.person;
+      return person?.loggedIn && /^[A-Za-z0-9_-]{1,64}$/.test(person.username) ? person.username : "";
+    })()`;
+    return String.raw`(() => {
+      if (document.querySelector('header[data-auth="0"]')) return "";
+      const own = location.pathname.match(/^\/review\/list\/(\d+)/);
+      if (own) return own[1];
+      const links = document.querySelectorAll('header a[href*="/review/list/"], header[data-auth="1"] a[href*="/user/show/"], .siteHeader a[href*="/review/list/"], #userDropMenu a[href*="/user/show/"], .personalNav a[href*="/review/list/"]');
+      for (const link of links) {
+        const match = link.getAttribute("href")?.match(/\/(?:review\/list|user\/show)\/(\d+)/);
+        if (match) return match[1];
+      }
+      return "";
+    })()`;
+  }
+
+  handleFromPath = (segments: string[]): string | null => {
+    const first = segments[0];
+    if (!first) return null;
+    if (this.source === "goodreads")
+      return segments.length === 1 && /^\d+$/.test(first) ? first : null;
+    return /^[A-Za-z0-9_-]{1,64}$/.test(first) &&
+      !["film", "films", "sign-in", "settings", "people", "member"].includes(
+        first,
+      )
+      ? first
+      : null;
+  };
   readonly tests;
 
   constructor(
@@ -63,8 +97,16 @@ export class ReferenceExtractor implements Extractor {
           ];
   }
 
-  authCookies(): boolean {
-    return false;
+  authCookies(name: string, value?: string): boolean {
+    if (!value) return false;
+    return this.source === "goodreads"
+      ? ["_session_id2", "jwt_token"].includes(name)
+      : [
+          "letterboxd.user",
+          "letterboxd.session",
+          "letterboxd.signed.in.as",
+          "JSESSIONID",
+        ].includes(name);
   }
 
   suitable(url: URL): boolean {

@@ -53,6 +53,8 @@ const SYNC_WATCHDOG_MS = {
 } satisfies Record<Source, number>;
 
 const SYNCABLE_SOURCES: readonly Source[] = [
+  "goodreads",
+  "letterboxd",
   "twitter",
   "youtube",
   "cosmos",

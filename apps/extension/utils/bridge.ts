@@ -1,5 +1,9 @@
 import type { ExternalSource } from "@pond/schema/sources";
-import { acceptHookCapture, createRateLimit } from "./hook-capture";
+import {
+  acceptHookCapture,
+  acceptHookSourceChange,
+  createRateLimit,
+} from "./hook-capture";
 import { asText, at, isRecord, type JsonValue } from "./json";
 import { sendMessage } from "./messaging";
 import { getSettings, watchSettings } from "./settings";
@@ -13,6 +17,7 @@ export async function bridge(source: ExternalSource): Promise<void> {
     settings = next;
   });
   const allow = createRateLimit(CAPTURES_PER_MINUTE, 60_000);
+  const allowChange = createRateLimit(2, 60_000);
 
   window.addEventListener("message", (event: MessageEvent) => {
     if (event.source !== window) return;
@@ -21,6 +26,16 @@ export async function bridge(source: ExternalSource): Promise<void> {
     const message = envelope.message;
     if (!isRecord(message)) return;
 
+    if (message.kind === "sourceChanged") {
+      const accepted = acceptHookSourceChange(
+        source,
+        asText(message.source),
+        settings,
+      );
+      if (accepted && allowChange(Date.now()))
+        void sendMessage("sourceChanged", { source: accepted }).catch(() => {});
+      return;
+    }
     if (message.kind === "capture") {
       const url = asText(at(message, "payload", "url"));
       if (!url) return;

@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { acceptHookCapture, createRateLimit } from "./hook-capture";
+import {
+  acceptHookCapture,
+  acceptHookSourceChange,
+  createRateLimit,
+} from "./hook-capture";
 import { DEFAULT_SETTINGS, type PondSettings } from "./types";
 
 const POST = "https://x.com/pond/status/1";
@@ -89,5 +93,24 @@ describe("createRateLimit", () => {
     expect(allow(10)).toBe(true);
     expect(allow(20)).toBe(false);
     expect(allow(1000)).toBe(true);
+  });
+});
+
+describe("reference source refresh notifications", () => {
+  it("accepts only the enabled source belonging to the current page", () => {
+    expect(acceptHookSourceChange("goodreads", "goodreads", settings())).toBe(
+      "goodreads",
+    );
+    expect(
+      acceptHookSourceChange("letterboxd", "goodreads", settings()),
+    ).toBeNull();
+    expect(
+      acceptHookSourceChange("twitter", "goodreads", settings()),
+    ).toBeNull();
+    const disabled = settings();
+    disabled.enabled.goodreads = false;
+    expect(
+      acceptHookSourceChange("goodreads", "goodreads", disabled),
+    ).toBeNull();
   });
 });

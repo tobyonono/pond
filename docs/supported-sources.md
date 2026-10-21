@@ -10,8 +10,8 @@ The **Sync** column shows how a source's saved list is walked (`cursor` /
 
 | Source | Id | Hosts | URL patterns | Sync |
 | --- | --- | --- | --- | --- |
-| Goodreads | `goodreads` | `goodreads.com` | `^https?:\/\/(?:www\.)?goodreads\.com\/book\/show\/(\d+)` | — |
-| Letterboxd | `letterboxd` | `letterboxd.com`, `boxd.it` | `^https?:\/\/(?:www\.)?letterboxd\.com\/film\/([^/?#]+)`<br>`^https?:\/\/(?:www\.)?letterboxd\.com\/[^/]+\/film\/([^/?#]+)`<br>`^https?:\/\/boxd\.it\/([A-Za-z0-9]+)` | — |
+| Goodreads | `goodreads` | `goodreads.com` | `^https?:\/\/(?:www\.)?goodreads\.com\/book\/show\/(\d+)` | `cursor` |
+| Letterboxd | `letterboxd` | `letterboxd.com`, `boxd.it` | `^https?:\/\/(?:www\.)?letterboxd\.com\/film\/([^/?#]+)`<br>`^https?:\/\/(?:www\.)?letterboxd\.com\/[^/]+\/film\/([^/?#]+)`<br>`^https?:\/\/boxd\.it\/([A-Za-z0-9]+)` | `cursor` |
 | Twitter | `twitter` | `x.com`, `twitter.com` | `^https?:\/\/(?:www\.)?(?:x|twitter)\.com\/[^/]+\/status\/(\d+)`<br>`^https?:\/\/(?:www\.)?(?:x|twitter)\.com\/i\/web\/status\/(\d+)` | `cursor` |
 | Instagram | `instagram` | `instagram.com` | `^https?:\/\/(?:www\.)?instagram\.com\/(?:p|reels?|tv)\/([A-Za-z0-9_-]+)` | `cursor` |
 | Pinterest | `pinterest` | `pinterest.com`, `pin.it` | `^https?:\/\/(?:[a-z]+\.)?pinterest\.[a-z.]+\/pin\/(\d+)`<br>`^https?:\/\/pin\.it\/([A-Za-z0-9]+)` | `scroll` |

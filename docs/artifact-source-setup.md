@@ -28,7 +28,30 @@ The permission is optional and requested from the user's button click. A browser
 grants access to the bookmarks API as a whole; this extension filters delivery to
 the chosen folders locally.
 
-## Books and films
+## Connected books and films
+
+Open **Sources → New Source → Goodreads / Letterboxd**. Pond opens the normal
+browser sign-in flow, the extension transfers that source's signed-in session,
+and Pond verifies the actual viewer before creating the Account. Choose the
+shelves/lists to sync in the existing import-scope dialog. These are connected
+Accounts with the same status, Sync Now, pause, reconnect and scheduled-sync
+controls as the original Sources.
+
+Goodreads sync reads all books or selected shelves using the account's paginated
+shelf feeds. Letterboxd sync covers Watchlist, Watched, Diary / Logged and Liked
+Films. Initial histories checkpoint between batches; incremental runs stop at
+known pages. Add to Folders files known items into their source collections too.
+Captures use the existing public-page pipeline and optional TMDB enrichment.
+
+The Chrome hooks capture confirmed Goodreads shelving, custom tags and rating
+changes, plus Letterboxd watchlist additions, watched toggles and diary saves.
+Confirmed actions also request a bounded refresh of an existing connected Account,
+so a film logged from a modal can sync even if its canonical URL is absent from
+the current page. Notifications cannot create Accounts and are checked against
+the current source and enabled setting. Scheduled sync catches changes made on
+other devices. Source un-saves retain the archived Pond item, as for other Sources.
+
+## Optional export imports
 
 **Import Goodreads** accepts Goodreads' library CSV and lets you choose shelves.
 It retains book identity, author, ISBN, year, rating, review and added date;
@@ -42,11 +65,9 @@ protected credentials, outside the Library. `TMDB_API_KEY` is also supported.
 Exact TMDB IDs from Letterboxd take priority over title/year search. Ambiguous
 searches remain unresolved, and unavailable enrichment retains the source record.
 
-The extension observes successful Goodreads shelf additions and Letterboxd
-watchlist additions. These hooks capture the item URL; CSV imports supply shelf
-memberships, ratings and reviews. Public-page capture and TMDB enrichment run in
-the desktop pipeline. Full historical account sync and live rating updates are
-not implemented by these hooks.
+Export imports remain available separately. They also provide reviews, user
+ratings and export-only fields; browser action capture does not overwrite locally
+edited Pond titles, notes or ratings.
 
 **Import Bookmarks** in the desktop Import menu also supports a one-time Chrome
 Bookmarks JSON file or HTML export, with folder selection before import.
@@ -72,7 +93,7 @@ CSC_IDENTITY_AUTO_DISCOVERY=false pnpm exec electron-builder --config electron-b
 ```
 
 `electron-builder.fork.yml` retains Pond's application identity and Library
-location, marks the version `1.2.0-fork.2`, and disables publishing. Fork-marked
+location, marks the version `1.2.0-fork.4`, and disables publishing. Fork-marked
 builds disable the updater, including manual download and installation paths,
 so an upstream release cannot replace custom changes. This local package is
 ad-hoc signed and not notarized. Packaging verifies the complete signature after
@@ -88,8 +109,8 @@ again. Automatic browser-folder sync is opt-in after the extension is updated.
 ## Source setup and Instagram pacing
 
 **Sources → New Source** and **New → Sources → New Source** include Goodreads,
-Letterboxd and Bookmark Folders. These open their import setup; they do not claim
-unsupported full-history account connections. Continuous bookmark folder watching
+Letterboxd and Bookmark Folders. Goodreads and Letterboxd open account connection; Bookmark Folders opens its
+file-import setup and links to the extension instructions. Continuous bookmark folder watching
 is configured in the Chrome extension's **Bookmark Folders** screen.
 
 The desktop's Instagram capture sessions serialize API requests through the shared

@@ -33,6 +33,19 @@ describe("nativeRequestSchema", () => {
 });
 
 describe("dispatchNative", () => {
+  it("queues a reference source refresh without creating an account or accepting another source", async () => {
+    const sourceChanged = vi.fn();
+    const services = ports({ sourceChanged });
+    await expect(
+      dispatchNative({ type: "source.changed", source: "goodreads" }, services),
+    ).resolves.toEqual({ ok: true, data: { queued: true } });
+    expect(sourceChanged).toHaveBeenCalledExactlyOnceWith("goodreads");
+    await expect(
+      dispatchNative({ type: "source.changed", source: "instagram" }, services),
+    ).resolves.toEqual({ ok: false, error: "invalid" });
+    expect(sourceChanged).toHaveBeenCalledTimes(1);
+    expect(services.sessionImport).not.toHaveBeenCalled();
+  });
   it("rejects automatic bookmarks when a different Library is active", async () => {
     const captureBookmark = vi
       .fn()

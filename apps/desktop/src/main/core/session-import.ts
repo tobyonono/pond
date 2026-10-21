@@ -76,7 +76,22 @@ export async function importSessionCookies(
   }
 
   const identityKey = identityKeyFromCookies(source, filtered);
-  const resolution = await resolveTargetAccount(source, filtered, identityKey);
+  const reference = source === "goodreads" || source === "letterboxd";
+  let resolution: AccountResolution;
+  if (reference) {
+    const handle = await probeStagedHandle(source, filtered);
+    if (!handle)
+      return failedSessionImport(source, "session_not_authenticated");
+    const matched = await findAccountByHandle(source, handle);
+    const account =
+      matched ??
+      (await createAccount({ source, handle, sync: awaitingImportChoice() }));
+    resolution = {
+      account,
+      kind: matched ? "handle_match" : "created",
+      probedHandle: handle,
+    };
+  } else resolution = await resolveTargetAccount(source, filtered, identityKey);
 
   if (source === "reddit" && !resolution.probedHandle) {
     log.info(

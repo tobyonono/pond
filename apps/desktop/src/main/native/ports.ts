@@ -1,4 +1,5 @@
 import { app } from "electron";
+import log from "electron-log/main.js";
 import { sourcesSkippingLikes } from "../../shared/import-scope";
 import { attachCaptureCookies, captures } from "../core/captures";
 import { enqueue, libraryInfo, sessionImport, sessionPending } from "../ops";
@@ -6,6 +7,15 @@ import type { NativePorts } from "./rpc";
 
 export function liveNativePorts(): NativePorts {
   return {
+    sourceChanged: (source) => {
+      void import("../core/sync")
+        .then(({ syncSource }) =>
+          syncSource(source, { trigger: "cron", maxItems: 150 }),
+        )
+        .catch((error) =>
+          log.warn("[pond native] activity sync failed", source, error),
+        );
+    },
     captureBookmark: async (input) => {
       const { captureBrowserBookmark } = await import(
         "../core/browser-bookmarks"
@@ -48,7 +58,10 @@ export function liveNativePorts(): NativePorts {
       const likes = { ...prefs.extension.likes };
       for (const source of sourcesSkippingLikes(accounts))
         likes[source] = false;
-      return { ...prefs.extension, likes };
+      return {
+        ...prefs.extension,
+        likes,
+      };
     },
     sessionPending,
     sessionImport,

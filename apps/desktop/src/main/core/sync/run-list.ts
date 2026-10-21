@@ -20,6 +20,7 @@ import { fileIntoFolders } from "./collection-folders";
 import { NO_COLLECTION_PASS, walkEveryCollection } from "./every-collection";
 import { mergeEntryListKinds, stampListKind, unionById } from "./harvest-union";
 import { collectionCheckDue, listHarvestPlan } from "./import-scope";
+import { listSyncCheckpoint } from "./list-checkpoint";
 import {
   loadAllKnownIds,
   loadSyncBaseline,
@@ -29,6 +30,8 @@ import {
 import { emit, listGapNote } from "./sync-status";
 
 export const LIST_HARVEST_SOURCES = new Set<Source>([
+  "goodreads",
+  "letterboxd",
   "youtube",
   "cosmos",
   "arena",
@@ -62,7 +65,13 @@ export async function syncListSource(
   });
 
   let accountKey: string | undefined;
-  if (source === "arena" || source === "tiktok" || source === "reddit") {
+  if (
+    source === "arena" ||
+    source === "tiktok" ||
+    source === "reddit" ||
+    source === "goodreads" ||
+    source === "letterboxd"
+  ) {
     accountKey = (await resolveAccountHandle(account)) ?? undefined;
     if (!accountKey) {
       log.info(`[pond sync:${source}] could not resolve account from session`);
@@ -88,7 +97,9 @@ export async function syncListSource(
   );
   const accountSync = await getAccountSync(accountId);
   const { resumeCursor } = accountSync;
-  const resuming = plan.primary && baseline.full && Boolean(resumeCursor);
+  const referenceSource = source === "goodreads" || source === "letterboxd";
+  const resuming =
+    (plan.primary || referenceSource) && baseline.full && Boolean(resumeCursor);
   if (resuming) {
     log.info(
       `[pond sync:${source}] continuing the list where the last run stopped`,
@@ -105,6 +116,7 @@ export async function syncListSource(
     earlyStop: !baseline.full,
     accountKey,
   };
+  if (referenceSource && maxItems) listArgs.freshLimit = maxItems;
   if (resuming && resumeCursor) listArgs.resumeCursor = resumeCursor;
   if (plan.listKinds.length > 0) listArgs.listKinds = plan.listKinds;
   const harvest: ListHarvestResult = plan.collections
@@ -178,7 +190,7 @@ export async function syncListSource(
   const gaps: string[] = [];
   const dualHarvest = source === "reddit" || source === "tiktok";
   let combined =
-    dualHarvest && !plan.collections
+    referenceSource || (dualHarvest && !plan.collections)
       ? harvest.entries
       : stampListKind(harvest.entries, "saved");
   if (dualHarvest && plan.collections && plan.primary) {
@@ -242,16 +254,18 @@ export async function syncListSource(
     ? await walkEveryCollection("Folders", {
         list: () => listSourceCollections(source, { partition, accountKey }),
         walk: (collections) =>
-          harvestSourceCollections(
-            source,
-            collections,
-            {
-              knownIds: Array.from(knownIds),
-              earlyStop: collectionEarlyStop,
-              accountKey,
-            },
-            { partition },
-          ),
+          referenceSource
+            ? Promise.resolve({ ok: true as const, entries: combined })
+            : harvestSourceCollections(
+                source,
+                collections,
+                {
+                  knownIds: Array.from(knownIds),
+                  earlyStop: collectionEarlyStop,
+                  accountKey,
+                },
+                { partition },
+              ),
       })
     : NO_COLLECTION_PASS;
   if (collectionPass.gap) gaps.push(collectionPass.gap);
@@ -267,13 +281,11 @@ export async function syncListSource(
       `[pond sync:${source}] test cap active. Enqueueing ${fresh.length} of ${allFresh.length} fresh items`,
     );
   }
-  /** A capped run leaves harvested items unqueued, so the cursor must not move past them. */
-  const nextResumeCursor =
-    fresh.length < allFresh.length
-      ? undefined
-      : harvest.reachedEnd
-        ? null
-        : (harvest.resumeCursor ?? null);
+  const { reachedEnd, resumeCursor: nextResumeCursor } = listSyncCheckpoint(
+    harvest,
+    fresh.length,
+    allFresh.length,
+  );
   ev.harvest = {
     seen: Math.max(harvest.seen ?? 0, combined.length),
     fresh: fresh.length,
@@ -282,7 +294,7 @@ export async function syncListSource(
   if (fresh.length === 0) {
     await fileIntoFolders(account, filing, collectionPass.collections);
     const lastSyncedAt = await persistWatermark(accountId, {
-      full: baseline.full && harvest.reachedEnd,
+      full: baseline.full && reachedEnd,
       newestId: null,
       total: baseline.total,
       resumeCursor: nextResumeCursor,
@@ -293,7 +305,7 @@ export async function syncListSource(
       source,
       state: "done",
       message: [
-        harvest.reachedEnd
+        reachedEnd
           ? "All caught up."
           : "Paused mid-list. Will keep going next sync.",
         ...gaps,
@@ -339,7 +351,7 @@ export async function syncListSource(
   await fileIntoFolders(account, filing, collectionPass.collections);
 
   const lastSyncedAt = await persistWatermark(accountId, {
-    full: baseline.full && harvest.reachedEnd,
+    full: baseline.full && reachedEnd,
     newestId: resuming ? null : (fresh[0]?.sourceId ?? null),
     total: baseline.total + bulk.created,
     resumeCursor: nextResumeCursor,
@@ -350,7 +362,7 @@ export async function syncListSource(
     source,
     state: "done",
     message: [
-      harvest.reachedEnd
+      reachedEnd
         ? `Queued ${succeeded} item${succeeded === 1 ? "" : "s"} for ingest.`
         : `Queued ${succeeded} item${succeeded === 1 ? "" : "s"}. More remain for the next sync.`,
       ...gaps,
