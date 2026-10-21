@@ -15,7 +15,9 @@ async function read(
   const dom = new JSDOM("");
   const url =
     source === "goodreads"
-      ? "https://www.goodreads.com/review/list_rss/123"
+      ? list === "collections"
+        ? "https://www.goodreads.com/review/list/123"
+        : "https://www.goodreads.com/review/list_rss/123"
       : "https://letterboxd.com/person/diary/";
   const raw = await runInNewContext(
     buildReferenceListingExpression(source, url, list),
@@ -53,6 +55,23 @@ describe("reference source listing boundary", () => {
         },
       ],
     });
+  });
+  it("lists Goodreads shelves without book-row links, action buttons or the all-books filter", async () => {
+    const reply = await read(
+      "goodreads",
+      '<div id="shelves"><a href="/review/list/123?shelf=%23ALL%23">All (271)</a><a href="/review/list/123?shelf=read">Read ‎(11)</a><a href="/review/list/123?shelf=design">Design (4)</a></div><div id="books"><a href="/review/list/123?shelf=to-read">to-read</a><a href="/review/list/123?shelf=other">Other</a></div><a href="/review/list/123?shelf=fiction">+</a><a href="/shelf/add?shelf=poetry">Poetry</a>',
+      "collections",
+    );
+    expect(reply).toMatchObject({
+      ok: true,
+      collections: [
+        { id: "to-read", name: "Want to Read" },
+        { id: "currently-reading", name: "Currently Reading" },
+        { id: "read", name: "Read" },
+        { id: "design", name: "Design" },
+      ],
+    });
+    if (reply.ok) expect(reply.collections).toHaveLength(4);
   });
   it("reads current Letterboxd poster attributes, logged membership and pagination", async () => {
     const reply = await read(

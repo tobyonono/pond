@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import {
   type ConnectedAccount,
   type Folder,
@@ -14,6 +15,9 @@ import {
   collectionFiling,
 } from "../../../shared/import-scope";
 import { getDb } from "../../db";
+import { writeSaveInfo } from "../../lib/library";
+import { saveFile } from "../../paths";
+import { withMutationScope } from "../executor";
 import { assignSaveFolders, createFolder, listFolders } from "../folders";
 import { patchAccountSync } from "./accounts";
 
@@ -88,7 +92,26 @@ const defaultStore: CollectionFolderStore = {
   },
   async assign(assignments) {
     for (const batch of chunks(assignments)) {
-      await assignSaveFolders(batch, false);
+      await withMutationScope(async () => {
+        const db = await getDb();
+        const pending = await db
+          .select()
+          .from(saves)
+          .where(
+            and(
+              inArray(
+                saves.id,
+                batch.map(({ saveId }) => saveId),
+              ),
+              eq(saves.status, "ingesting"),
+            ),
+          );
+        // Queued captures can be filed before their first worker writes metadata.
+        for (const save of pending)
+          if (!existsSync(saveFile(save.id, "info.json")))
+            await writeSaveInfo(save);
+        await assignSaveFolders(batch, false);
+      });
     }
   },
   async rememberFolders(accountId, patch) {

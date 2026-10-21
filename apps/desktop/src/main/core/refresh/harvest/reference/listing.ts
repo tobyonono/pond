@@ -118,13 +118,24 @@ async function readListing(
       'a[href*="shelf="]',
     )) {
       const target = new URL(link.getAttribute("href") ?? "", url);
+      const page = new URL(url);
       const id = target.searchParams.get("shelf");
-      if (!id || id === "all" || target.origin !== new URL(url).origin)
+      const name = link.textContent
+        ?.replace(/[\u200e\u200f]/g, "")
+        .replace(/\s*\([\d,]+\)\s*$/, "")
+        .trim();
+      if (
+        !id ||
+        /^(?:all|#all#)$/i.test(id) ||
+        target.origin !== page.origin ||
+        target.pathname !== page.pathname ||
+        link.closest("#books, #booksBody") ||
+        !name ||
+        !/[\p{L}\p{N}]/u.test(name) ||
+        names.has(id)
+      )
         continue;
-      names.set(
-        id,
-        link.textContent?.replace(/\s*\([\d,]+\)\s*$/, "").trim() || id,
-      );
+      names.set(id, name);
     }
     if (
       !doc.querySelector(

@@ -112,3 +112,28 @@ and selected Always Allow directly in that system dialog. No password was read,
 stored in source code, or entered by the agent. Valid ad-hoc signatures preserve
 encryption but do not establish a stable Developer ID identity across local
 builds. A new build can require Keychain approval again.
+
+
+### Live Goodreads follow-up
+
+Fork.4's native host reported the expected version and the unchanged Library
+path. The app opened without another Safe Storage password prompt. Goodreads
+shelf discovery succeeded, and the selected Want to Read shelf queued 260 books
+through the normal pipeline. These are queued captures, not 260 completed media
+downloads. The first sync also exposed an existing filing race: collection-folder
+transactions expected `info.json` before a queued capture's first worker created
+it. Collection filing now materializes missing metadata for ingesting Saves from
+the current database under the existing mutation lock before assigning folders.
+Completed Saves and existing metadata files are left alone.
+
+Shelf discovery now ignores book-row links, add buttons and the all-books filter,
+and keeps stable names for the three standard shelves. The new fixture covers
+those live markup cases. After these corrections, all 14 focused collection,
+listing and identity tests passed; all 17 static-check tasks passed. The final
+package is fork.5. The earlier full-suite result above predates these small live
+corrections; it is not a claim that the entire suite was repeated afterward.
+
+Letterboxd's menu opened the normal Connection Request. The extension correctly
+reported that the browser was signed out and offered Open Sign-In Page. The
+signed-in Letterboxd sync and browser save actions still require that account
+handoff; the public-page and offline parser checks do not establish that result.

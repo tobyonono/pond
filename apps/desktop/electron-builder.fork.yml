@@ -2,7 +2,7 @@
 # credentials, native host and Dock shortcut continue to work.
 extends: electron-builder.yml
 extraMetadata:
-  version: 1.2.0-fork.4
+  version: 1.2.0-fork.5
 publish: null
 afterSign: scripts/verify-fork-signature.cjs
 mac:
