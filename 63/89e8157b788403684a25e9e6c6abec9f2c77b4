@@ -1,0 +1,37 @@
+apps/desktop/electron-builder.fork.yml
+  s_02c7375839359f::t_8155892eddcac5 5
+apps/desktop/src/renderer/src/features/sources/lib/registry.ts
+  s_02c7375839359f::t_15a3ea034cbcb9 4-5,48-49
+apps/extension/entrypoints/popup/app/index.tsx
+  s_02c7375839359f::t_f7ba824a459758 15-16,100-101
+apps/extension/wxt.config.ts
+  s_02c7375839359f::t_1d7310a70a7c1f 65-66
+docs/artifact-source-setup.md
+  s_02c7375839359f::t_93b27baf99765e 96
+packages/icons/README.md
+  s_02c7375839359f::t_40fc5263a8fc3b 46
+packages/icons/social-media/custom/goodreads.tsx
+  s_02c7375839359f::t_f481251a648a90 1-24
+packages/icons/social-media/custom/letterboxd.tsx
+  s_02c7375839359f::t_c2e16dfd7cedf7 1-48
+packages/icons/social-media/custom/source-logos.md
+  s_02c7375839359f::t_187c00afb53514 1-17
+packages/icons/social-media/index.ts
+  s_02c7375839359f::t_e1e488d88d83a2 6,10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6389e8157b788403684a25e9e6c6abec9f2c77b4",
+  "prompts": {},
+  "sessions": {
+    "s_02c7375839359f": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a125d1-8f62-70a1-9cc4-aeaf3fe5150d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Toby Onono <ononop@tcd.ie>"
+    }
+  }
+}
