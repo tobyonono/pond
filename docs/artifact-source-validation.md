@@ -168,3 +168,20 @@ Goodreads' existing browser session was refreshed successfully without creating
 a second Account. Its subsequent background read reported a fetch failure;
 this is distinct from the earlier folder-filing regression and is not claimed
 fixed by the logo update. Letterboxd remains connected with its existing scope.
+
+
+Installed fork.6 passed strict signature checks. Its live native host reported
+fork.6 and the unchanged Library path with 5,890 active records (including queued
+captures). The UI loaded the existing folders, five Accounts and saved items.
+The New Source dropdown visibly showed both brand marks, and Source rows used
+the same marks. Chrome's existing unpacked extension was reloaded and visibly
+reported 1.2.2 (Toby fork), enabled. No new Keychain prompt was observed while
+opening this installed build.
+
+Letterboxd's existing Account was matched during a browser-session refresh;
+no duplicate Account or re-import was created. Its 150 items remain intact.
+The following background read returned `auth_required`, so its current sync is
+paused on the platform authentication check. This installation verification does
+not claim uninterrupted future source-session persistence or successful playback
+of every browser save action. The app, extension, Library and account settings
+were backed up before replacement in the October 22 pre-fork.6 backup.
