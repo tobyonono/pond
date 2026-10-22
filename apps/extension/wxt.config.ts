@@ -62,8 +62,8 @@ export default defineConfig({
   },
   manifest: ({ browser }) => ({
     name: "Pond (Toby)",
-    version: "1.2.1",
-    version_name: "1.2.1 (Toby fork)",
+    version: "1.2.2",
+    version_name: "1.2.2 (Toby fork)",
     ...(browser === "firefox"
       ? {
           browser_specific_settings: {

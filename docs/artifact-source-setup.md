@@ -93,7 +93,7 @@ CSC_IDENTITY_AUTO_DISCOVERY=false pnpm exec electron-builder --config electron-b
 ```
 
 `electron-builder.fork.yml` retains Pond's application identity and Library
-location, marks the version `1.2.0-fork.5`, and disables publishing. Fork-marked
+location, marks the version `1.2.0-fork.6`, and disables publishing. Fork-marked
 builds disable the updater, including manual download and installation paths,
 so an upstream release cannot replace custom changes. This local package is
 ad-hoc signed and not notarized. Packaging verifies the complete signature after

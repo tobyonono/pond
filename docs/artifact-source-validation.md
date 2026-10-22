@@ -137,3 +137,34 @@ Letterboxd's menu opened the normal Connection Request. The extension correctly
 reported that the browser was signed out and offered Open Sign-In Page. The
 signed-in Letterboxd sync and browser save actions still require that account
 handoff; the public-page and offline parser checks do not establish that result.
+
+
+### Installed connected-source verification
+
+Installed fork.5 passed staged and installed strict signature verification, and
+its native host reported fork.5 with the unchanged Library path. Goodreads' first
+reconciliation hit a transient page load failure; a single retry completed the
+full selected shelf. The log recorded 260 Saves filed, and a read-only check of
+the Library confirmed all 260 Goodreads metadata files contain folder membership.
+The Account returned to Active. The user subsequently connected Letterboxd;
+on October 22 the installed Sources screen showed that Account with 150 items.
+
+### Source logos — 2026-10-22
+
+Goodreads and Letterboxd now have local brand SVG components in the shared icon
+package, replacing generic placeholders in the desktop Source registry and Chrome
+popup. This covers the New Source dropdown and the existing Source tiles that
+consume that registry. Asset provenance is documented beside the components.
+Both marks were rendered at 16, 20, 24 and 36 CSS pixels, at 2x pixel density,
+on light and dark backgrounds. No animation or layout behavior changed.
+
+All 18 static-check tasks and all six desktop/Chrome/Firefox production-build
+tasks passed. Chrome output is 1,852,449 bytes, including a 137,044-byte background
+worker, within the existing budgets. The existing full test suite was not
+repeated for this icon-only change. The local package versions are fork.6 and
+extension 1.2.2; installation verification follows below.
+
+Goodreads' existing browser session was refreshed successfully without creating
+a second Account. Its subsequent background read reported a fetch failure;
+this is distinct from the earlier folder-filing regression and is not claimed
+fixed by the logo update. Letterboxd remains connected with its existing scope.

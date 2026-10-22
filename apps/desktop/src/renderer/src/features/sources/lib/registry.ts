@@ -1,6 +1,8 @@
 import {
   IconBrandArena,
   IconBrandCosmos,
+  IconBrandGoodreads,
+  IconBrandLetterboxd,
   IconBrandThreads,
   IconInstagram,
   IconPinterest,
@@ -43,8 +45,8 @@ const SOURCE_LOGOS = {
 } satisfies Record<Source, string | null>;
 
 const SOURCE_ICONS = {
-  goodreads: IconSourceWeb,
-  letterboxd: IconSourceWeb,
+  goodreads: IconBrandGoodreads,
+  letterboxd: IconBrandLetterboxd,
   twitter: IconXTwitter,
   pinterest: IconPinterest,
   arena: IconBrandArena,

@@ -12,6 +12,8 @@ import {
 import {
   IconBrandArena,
   IconBrandCosmos,
+  IconBrandGoodreads,
+  IconBrandLetterboxd,
   IconBrandThreads,
   IconInstagram,
   IconPinterest,
@@ -95,8 +97,8 @@ const GROUPS: readonly { label: string; commands: readonly Command[] }[] = [
 ];
 
 const LOGOS = {
-  goodreads: IconBookmark,
-  letterboxd: IconBookmark,
+  goodreads: IconBrandGoodreads,
+  letterboxd: IconBrandLetterboxd,
   twitter: IconXTwitter,
   instagram: IconInstagram,
   pinterest: IconPinterest,

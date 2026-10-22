@@ -43,6 +43,7 @@ spot.
 
 Social and brand marks live under `social-media/custom/`. The X, GitHub, and
 Google Chrome paths come from [Simple Icons](https://simpleicons.org/) (CC0).
+Goodreads and Letterboxd marks are documented in [source-logos.md](social-media/custom/source-logos.md).
 Provider logos are documented in `social-media/custom/provider-logos.md`. The
 marks remain their owners' trademarks.
 
